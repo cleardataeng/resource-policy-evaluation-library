@@ -1,10 +1,12 @@
 # resource-policy-evaluation-library
 
-rpe-lib is made up of `Policy Engines (rpe.engines.Engine)` and `Resources (rpe.resources.Resource)`.
+rpe-lib is made up of `Policy Engines (rpe.engines.Engine)`, `Resources (rpe.resources.Resource)`, and `Extractors (rpe.resources.Extractor)`.
 
 `Resources` produce details about the current state of a given type of resource. A resource can be just about anything, but the initial goal of the project was to support Google Cloud Platform (GCP) resources. The implemention is intentionally generic to allow support for other resource types
 
 `Policy Engines` evaluate `Resources` against their configured policies. Given a resource, they can return a list of `Evaluations (rpe.policy.Evaluation)` indicating the name of each policy that applies to the resource (by resource type), and whether or not the resource is compliant. `Resource` also define a `remediate()` function, that should be able to take a dictionary description of how to manipulate a resource to make it compliant.
+
+`Extractors` parse structured data and return a list of resources, and optionally metadata about the data source.
 
 As an example, for GCP resources, the `remediate()` function expects details about what method to call in the Google REST API for the given resource, and what parameters to pass. So for a Google Cloud Storage Bucket, a policy that enforces bucket versioning could define remediation as a call to the buckets `patch()` method with the appropriate arguments to enable versioning.
 

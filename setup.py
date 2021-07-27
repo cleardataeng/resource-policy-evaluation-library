@@ -36,6 +36,7 @@ setup(
         'google-api-python-client-helpers',
         'jmespath',
         'tenacity',
+        'python-dateutil'
     ],
     packages=[
         'rpe',
