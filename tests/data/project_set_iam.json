@@ -1,0 +1,116 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "status": {},
+    "authenticationInfo": {
+      "principalEmail": "test-user@lab.cleardata.com"
+    },
+    "requestMetadata": {
+      "callerIp": "76.98.160.101",
+      "callerSuppliedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0,gzip(gfe)",
+      "requestAttributes": {},
+      "destinationAttributes": {}
+    },
+    "serviceName": "cloudresourcemanager.googleapis.com",
+    "methodName": "SetIamPolicy",
+    "authorizationInfo": [
+      {
+        "resource": "projects/cd-np-test1",
+        "permission": "resourcemanager.projects.setIamPolicy",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "cloudresourcemanager.googleapis.com",
+          "name": "projects/cd-np-test1",
+          "type": "cloudresourcemanager.googleapis.com/Project"
+        }
+      },
+      {
+        "resource": "projects/cd-np-test1",
+        "permission": "resourcemanager.projects.setIamPolicy",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "cloudresourcemanager.googleapis.com",
+          "name": "projects/cd-np-test1",
+          "type": "cloudresourcemanager.googleapis.com/Project"
+        }
+      }
+    ],
+    "resourceName": "projects/cd-np-test1",
+    "serviceData": {
+      "@type": "type.googleapis.com/google.iam.v1.logging.AuditData",
+      "policyDelta": {
+        "bindingDeltas": [
+          {
+            "action": "REMOVE",
+            "role": "roles/compute.admin",
+            "member": "serviceAccount:compute-full@cd-np-test1.iam.gserviceaccount.com"
+          }
+        ]
+      }
+    },
+    "request": {
+      "@type": "type.googleapis.com/google.iam.v1.SetIamPolicyRequest",
+      "policy": {
+        "etag": "BGxQGM=",
+        "bindings": [
+          {
+            "members": [
+              "serviceAccount:1234123123-compute@developer.gserviceaccount.com"
+            ],
+            "role": "roles/compute.admin"
+          }
+        ],
+        "auditConfigs": [
+          {
+            "auditLogConfigs": [
+              {
+                "logType": "ADMIN_READ"
+              },
+              {
+                "logType": "DATA_WRITE"
+              },
+              {
+                "logType": "DATA_READ"
+              }
+            ],
+            "service": "allServices"
+          }
+        ]
+      },
+      "resource": "cd-np-test1"
+    },
+    "response": {
+      "bindings": [
+      ],
+      "@type": "type.googleapis.com/google.iam.v1.Policy",
+      "etag": "BwXIEnsd74U=",
+      "auditConfigs": [
+        {
+          "auditLogConfigs": [
+            {
+              "logType": "ADMIN_READ"
+            },
+            {
+              "logType": "DATA_WRITE"
+            },
+            {
+              "logType": "DATA_READ"
+            }
+          ],
+          "service": "allServices"
+        }
+      ]
+    }
+  },
+  "insertId": "bxxka8e1doza",
+  "resource": {
+    "type": "project",
+    "labels": {
+      "project_id": "cd-np-test1"
+    }
+  },
+  "timestamp": "2021-07-27T03:29:43.406122Z",
+  "severity": "NOTICE",
+  "logName": "projects/cd-np-test1/logs/cloudaudit.googleapis.com%2Factivity",
+  "receiveTimestamp": "2021-07-27T03:29:44.765683992Z"
+}

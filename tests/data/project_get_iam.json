@@ -1,0 +1,48 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "status": {},
+    "authenticationInfo": {
+      "principalEmail": "test-user@lab.cleardata.com"
+    },
+    "requestMetadata": {
+      "callerIp": "76.98.160.101",
+      "callerSuppliedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0,gzip(gfe)",
+      "requestAttributes": {},
+      "destinationAttributes": {}
+    },
+    "serviceName": "cloudresourcemanager.googleapis.com",
+    "methodName": "GetIamPolicy",
+    "authorizationInfo": [
+      {
+        "resource": "projects/cd-np-test1",
+        "permission": "resourcemanager.projects.getIamPolicy",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "cloudresourcemanager.googleapis.com",
+          "name": "projects/cd-np-test1",
+          "type": "cloudresourcemanager.googleapis.com/Project"
+        }
+      }
+    ],
+    "resourceName": "projects/cd-np-test1",
+    "request": {
+      "@type": "type.googleapis.com/google.iam.v1.GetIamPolicyRequest",
+      "resource": "cd-np-test1",
+      "options": {
+        "requestedPolicyVersion": 3
+      }
+    }
+  },
+  "insertId": "-kt15ird337w",
+  "resource": {
+    "type": "project",
+    "labels": {
+      "project_id": "cd-np-test1"
+    }
+  },
+  "timestamp": "2021-07-27T03:29:39.945759Z",
+  "severity": "INFO",
+  "logName": "projects/cd-np-test1/logs/cloudaudit.googleapis.com%2Fdata_access",
+  "receiveTimestamp": "2021-07-27T03:29:40.090753959Z"
+}

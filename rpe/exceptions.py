@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from urllib.error import URLError
 
 from googleapiclient.errors import HttpError
-from urllib.error import URLError
 
 
 def is_retryable_exception(err):
@@ -55,4 +55,8 @@ class UnsupportedRemediationSpec(Exception):
 
 
 class InvalidRemediationSpecStep(Exception):
+    pass
+
+
+class ExtractorException(Exception):
     pass

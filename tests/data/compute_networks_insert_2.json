@@ -1,0 +1,77 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "authenticationInfo": {
+      "principalEmail": "user@cleardata.com"
+    },
+    "requestMetadata": {
+      "callerIp": "203.0.113.34",
+      "callerSuppliedUserAgent": "google-cloud-sdk gcloud/341.0.0 command/gcloud.compute.networks.create invocation-id/84b4108326804a548629bda82d9cc0ea environment/None environment-version/None interactive/true from-script/false python/3.8.10 term/xterm-256color (Macintosh; Intel Mac OS X 20.5.0),gzip(gfe)",
+      "requestAttributes": {
+        "time": "2021-06-29T21:05:12.588339Z",
+        "auth": {}
+      },
+      "destinationAttributes": {}
+    },
+    "serviceName": "compute.googleapis.com",
+    "methodName": "v1.compute.networks.insert",
+    "authorizationInfo": [
+      {
+        "permission": "compute.networks.create",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "compute",
+          "name": "projects/test-project-1/global/networks/xyzcli",
+          "type": "compute.networks"
+        }
+      }
+    ],
+    "resourceName": "projects/test-project-1/global/networks/xyzcli",
+    "request": {
+      "routingConfig": {
+        "routingMode": "REGIONAL"
+      },
+      "@type": "type.googleapis.com/compute.networks.insert",
+      "mtu": "1460",
+      "autoCreateSubnetworks": false,
+      "name": "xyzcli"
+    },
+    "response": {
+      "operationType": "insert",
+      "startTime": "2021-06-29T14:05:12.427-07:00",
+      "targetLink": "https://www.googleapis.com/compute/v1/projects/test-project-1/global/networks/xyzcli",
+      "status": "RUNNING",
+      "selfLink": "https://www.googleapis.com/compute/v1/projects/test-project-1/global/operations/operation-1625000712103-5c5edf634652f-1790f250-3f762fe6",
+      "insertTime": "2021-06-29T14:05:12.413-07:00",
+      "selfLinkWithId": "https://www.googleapis.com/compute/v1/projects/test-project-1/global/operations/8931384447982777831",
+      "user": "user@cleardata.com",
+      "name": "operation-1625000712103-5c5edf634652f-1790f250-3f762fe6",
+      "progress": "0",
+      "targetId": "283459718653294055",
+      "id": "8931384447982777831",
+      "@type": "type.googleapis.com/operation"
+    },
+    "resourceLocation": {
+      "currentLocations": [
+        "global"
+      ]
+    }
+  },
+  "insertId": "ktglm2digpi",
+  "resource": {
+    "type": "gce_network",
+    "labels": {
+      "network_id": "283459718653294055",
+      "project_id": "test-project-1"
+    }
+  },
+  "timestamp": "2021-06-29T21:05:12.164976Z",
+  "severity": "NOTICE",
+  "logName": "projects/test-project-1/logs/cloudaudit.googleapis.com%2Factivity",
+  "operation": {
+    "id": "operation-1625000712103-5c5edf634652f-1790f250-3f762fe6",
+    "producer": "compute.googleapis.com",
+    "first": true
+  },
+  "receiveTimestamp": "2021-06-29T21:05:13.497646003Z"
+}
