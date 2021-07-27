@@ -1,0 +1,79 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "authenticationInfo": {
+      "principalEmail": "user@cleardata.com"
+    },
+    "requestMetadata": {
+      "callerIp": "203.0.113.34",
+      "callerSuppliedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0,gzip(gfe),gzip(gfe)",
+      "requestAttributes": {
+        "time": "2021-06-29T21:04:56.478289Z",
+        "reason": "8uSywAYQGg5Db2xpc2V1bSBGbG93cw",
+        "auth": {}
+      },
+      "destinationAttributes": {}
+    },
+    "serviceName": "compute.googleapis.com",
+    "methodName": "beta.compute.networks.insert",
+    "authorizationInfo": [
+      {
+        "permission": "compute.networks.create",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "compute",
+          "name": "projects/test-project-1/global/networks/xyz",
+          "type": "compute.networks"
+        }
+      }
+    ],
+    "resourceName": "projects/test-project-1/global/networks/xyz",
+    "request": {
+      "routingConfig": {
+        "routingMode": "REGIONAL"
+      },
+      "description": "",
+      "name": "xyz",
+      "autoCreateSubnetworks": false,
+      "mtu": "1460",
+      "@type": "type.googleapis.com/compute.networks.insert"
+    },
+    "response": {
+      "status": "RUNNING",
+      "targetId": "7947007926906270743",
+      "targetLink": "https://www.googleapis.com/compute/beta/projects/test-project-1/global/networks/xyz",
+      "user": "user@cleardata.com",
+      "@type": "type.googleapis.com/operation",
+      "selfLink": "https://www.googleapis.com/compute/beta/projects/test-project-1/global/operations/operation-1625000696006-5c5edf53ec8e0-6aeebfa5-320c28ee",
+      "progress": "0",
+      "operationType": "insert",
+      "insertTime": "2021-06-29T14:04:56.263-07:00",
+      "name": "operation-1625000696006-5c5edf53ec8e0-6aeebfa5-320c28ee",
+      "startTime": "2021-06-29T14:04:56.268-07:00",
+      "id": "6582662276287181847",
+      "selfLinkWithId": "https://www.googleapis.com/compute/beta/projects/test-project-1/global/operations/6582662276287181847"
+    },
+    "resourceLocation": {
+      "currentLocations": [
+        "global"
+      ]
+    }
+  },
+  "insertId": "-oenoe7djxto",
+  "resource": {
+    "type": "gce_network",
+    "labels": {
+      "network_id": "7947007926906270743",
+      "project_id": "test-project-1"
+    }
+  },
+  "timestamp": "2021-06-29T21:04:56.052843Z",
+  "severity": "NOTICE",
+  "logName": "projects/test-project-1/logs/cloudaudit.googleapis.com%2Factivity",
+  "operation": {
+    "id": "operation-1625000696006-5c5edf53ec8e0-6aeebfa5-320c28ee",
+    "producer": "compute.googleapis.com",
+    "first": true
+  },
+  "receiveTimestamp": "2021-06-29T21:04:57.360571693Z"
+}

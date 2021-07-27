@@ -28,7 +28,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     author="Joe Ceresini",
-    url="https://github.com/forseti-security/resource-policy-evaluation-library",
+    url="https://github.com/cleardataeng/resource-policy-evaluation-library",
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
     install_requires=[
