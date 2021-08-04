@@ -36,7 +36,7 @@ setup(
         'tenacity',
         'python-dateutil'
     ],
-    packages=find_packages(include=['rpe.*']),
+    packages=find_packages(include=['rpe*']),
     package_data={},
     license="Apache 2.0",
     keywords="gcp policy enforcement",
