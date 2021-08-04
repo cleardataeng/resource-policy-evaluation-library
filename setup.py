@@ -13,9 +13,7 @@
 # limitations under the License.
 
 
-from __future__ import print_function
-
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="rpe-lib",
@@ -38,11 +36,7 @@ setup(
         'tenacity',
         'python-dateutil'
     ],
-    packages=[
-        'rpe',
-        'rpe.engines',
-        'rpe.resources',
-    ],
+    packages=find_packages(include=['rpe.*']),
     package_data={},
     license="Apache 2.0",
     keywords="gcp policy enforcement",
