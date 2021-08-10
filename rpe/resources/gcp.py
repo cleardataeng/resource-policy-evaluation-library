@@ -405,6 +405,10 @@ class GoogleAPIResource(Resource):
     def project_id(self):
         return self._resource_data.get('project_id')
 
+    @property
+    def location(self):
+        return self._resource_data.get('location')
+
 
 class GcpAppEngineInstance(GoogleAPIResource):
 
