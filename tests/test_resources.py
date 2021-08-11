@@ -268,6 +268,29 @@ test_cases = [
     ),
 ]
 
+location_test_cases = [
+    ResourceTestCase(
+        resource_data={
+            'name': test_resource_name,
+            'location': 'us-central1-a',
+            'project_id': test_project
+        },
+        cls=GcpRedisInstance,
+        resource_type='redis.googleapis.com/Instance',
+        name='//redis.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource'
+    ),
+    ResourceTestCase(
+        resource_data={
+            'name': test_resource_name,
+            'location': 'us-central1',
+            'project_id': test_project
+        },
+        cls=GcpMemcacheInstance,
+        resource_type='memcache.googleapis.com/Instance',
+        name='//memcache.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource'
+    ),
+]
+
 
 @pytest.mark.parametrize(
     "case",
@@ -302,6 +325,14 @@ def test_gcp_full_resource_name(case):
     r = GoogleAPIResource.from_resource_data(resource_type=case.resource_type, client_kwargs=client_kwargs, **case.resource_data)
     assert r.full_resource_name() == case.name
 
+
+@pytest.mark.parametrize(
+    "case",
+    location_test_cases,
+    ids=[case.cls.__name__ for case in location_test_cases])
+def test_gcp_location(case):
+    r = GoogleAPIResource.from_resource_data(resource_type=case.resource_type, client_kwargs=client_kwargs, **case.resource_data)
+    assert r.location == case.resource_data.get('location')
 
 def test_missing_resource_data():
     with pytest.raises(ResourceException) as excinfo:
