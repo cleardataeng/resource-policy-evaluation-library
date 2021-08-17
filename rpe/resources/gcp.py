@@ -490,6 +490,9 @@ class GcpCloudFunction(GoogleAPIResource):
     resource_components = {
         'iam': 'getIamPolicy',
     }
+    readiness_key = 'status'
+    readiness_value = 'ACTIVE'
+    readiness_terminal_values = ['CLOUD_FUNCTION_STATUS_UNSPECIFIED','OFFLINE','UNKNOWN']
 
     required_resource_data = ['name', 'location', 'project_id']
 
