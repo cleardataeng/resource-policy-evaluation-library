@@ -17,6 +17,7 @@ import collections
 import pytest
 
 from google.oauth2.credentials import Credentials
+from googleapiclient.http import HttpMockSequence
 
 from rpe.exceptions import ResourceException
 from rpe.resources.gcp import GoogleAPIResource
@@ -49,7 +50,7 @@ client_kwargs = {
     'credentials': Credentials(token='')
 }
 
-ResourceTestCase = collections.namedtuple('ResourceTestCase', 'resource_data cls resource_type name')
+ResourceTestCase = collections.namedtuple('ResourceTestCase', 'resource_data cls resource_type name http uniquifier')
 
 test_cases = [
     ResourceTestCase(
@@ -62,7 +63,13 @@ test_cases = [
         },
         cls=GcpAppEngineInstance,
         resource_type='appengine.googleapis.com/Instance',
-        name='//appengine.googleapis.com/apps/my_project/services/default/versions/0123456789/instances/my_resource'
+        name='//appengine.googleapis.com/apps/my_project/services/default/versions/0123456789/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "startTime":"appEngine_startTime", "vmStatus" : "RUNNING"}'),
+            ({'status': 200}, '{}'),
+         ]),
+        uniquifier='appEngine_startTime'
+
     ),
     ResourceTestCase(
         resource_data={
@@ -71,7 +78,12 @@ test_cases = [
         },
         cls=GcpBigqueryDataset,
         resource_type='bigquery.googleapis.com/Dataset',
-        name='//bigquery.googleapis.com/projects/my_project/datasets/my_resource'
+        name='//bigquery.googleapis.com/projects/my_project/datasets/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "id":"dataset_id"}'),
+        ]),
+        uniquifier='dataset_id'
+
     ),
     ResourceTestCase(
         resource_data={
@@ -80,7 +92,12 @@ test_cases = [
         },
         cls=GcpBigtableInstance,
         resource_type='bigtableadmin.googleapis.com/Instance',
-        name='//bigtable.googleapis.com/projects/my_project/instances/my_resource'
+        name='//bigtable.googleapis.com/projects/my_project/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "state":"READY"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -90,7 +107,12 @@ test_cases = [
         },
         cls=GcpCloudFunction,
         resource_type='cloudfunctions.googleapis.com/CloudFunction',
-        name='//cloudfunctions.googleapis.com/projects/my_project/locations/us-central1-a/functions/my_resource'
+        name='//cloudfunctions.googleapis.com/projects/my_project/locations/us-central1-a/functions/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "status":"ACTIVE"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -100,7 +122,11 @@ test_cases = [
         },
         cls=GcpComputeDisk,
         resource_type='compute.googleapis.com/Disk',
-        name='//compute.googleapis.com/projects/my_project/zones/us-central1-a/disks/my_resource'
+        name='//compute.googleapis.com/projects/my_project/zones/us-central1-a/disks/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "id":"disk_id"}'),
+        ]),
+        uniquifier='disk_id'
     ),
     ResourceTestCase(
         resource_data={
@@ -110,7 +136,11 @@ test_cases = [
         },
         cls=GcpComputeInstance,
         resource_type='compute.googleapis.com/Instance',
-        name='//compute.googleapis.com/projects/my_project/zones/us-central1-a/instances/my_resource'
+        name='//compute.googleapis.com/projects/my_project/zones/us-central1-a/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "id":"disk_id"}'),
+        ]),
+        uniquifier='disk_id'
     ),
     ResourceTestCase(
         resource_data={
@@ -120,7 +150,12 @@ test_cases = [
         },
         cls=GcpGkeCluster,
         resource_type='container.googleapis.com/Cluster',
-        name='//container.googleapis.com/projects/my_project/locations/us-central1-a/clusters/my_resource'
+        name='//container.googleapis.com/projects/my_project/locations/us-central1-a/clusters/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "id":"cluster_id", "status" : "RUNNING"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='cluster_id'
     ),
     ResourceTestCase(
         resource_data={
@@ -131,7 +166,12 @@ test_cases = [
         },
         cls=GcpGkeClusterNodepool,
         resource_type='container.googleapis.com/NodePool',
-        name='//container.googleapis.com/projects/my_project/locations/us-central1-a/clusters/parent_resource/nodePools/my_resource'
+        name='//container.googleapis.com/projects/my_project/locations/us-central1-a/clusters/parent_resource/nodePools/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "status" : "RUNNING"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -139,7 +179,11 @@ test_cases = [
         },
         cls=GcpOrganization,
         resource_type='cloudresourcemanager.googleapis.com/Organization',
-        name='//cloudresourcemanager.googleapis.com/organizations/012345678901'
+        name='//cloudresourcemanager.googleapis.com/organizations/012345678901',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name"}'),
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -148,7 +192,12 @@ test_cases = [
         },
         cls=GcpProject,
         resource_type='cloudresourcemanager.googleapis.com/Project',
-        name='//cloudresourcemanager.googleapis.com/projects/my_project'
+        name='//cloudresourcemanager.googleapis.com/projects/my_project',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "projectNumber":"project_number"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='project_number'
     ),
     ResourceTestCase(
         resource_data={
@@ -157,7 +206,11 @@ test_cases = [
         },
         cls=GcpProjectService,
         resource_type='serviceusage.googleapis.com/Service',
-        name='//serviceusage.googleapis.com/projects/my_project/services/compute.googleapis.com'
+        name='//serviceusage.googleapis.com/projects/my_project/services/compute.googleapis.com',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name"}'),
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -167,7 +220,12 @@ test_cases = [
         },
         cls=GcpDatafusionInstance,
         resource_type='datafusion.googleapis.com/Instance',
-        name='//datafusion.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource'
+        name='//datafusion.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "createTime":"datafusion_createTime" , "state":"RUNNING"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='datafusion_createTime'
     ),
     ResourceTestCase(
         resource_data={
@@ -177,7 +235,11 @@ test_cases = [
         },
         cls=GcpDataprocCluster,
         resource_type='dataproc.googleapis.com/Cluster',
-        name='//dataproc.googleapis.com/projects/my_project/regions/global/clusters/my_resource'
+        name='//dataproc.googleapis.com/projects/my_project/regions/global/clusters/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "clusterUuid":"cluster_Uuid"}'),
+        ]),
+        uniquifier='cluster_Uuid'
     ),
     ResourceTestCase(
         resource_data={
@@ -186,7 +248,11 @@ test_cases = [
         },
         cls=GcpPubsubSubscription,
         resource_type='pubsub.googleapis.com/Subscription',
-        name='//pubsub.googleapis.com/projects/my_project/subscriptions/my_resource'
+        name='//pubsub.googleapis.com/projects/my_project/subscriptions/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name"}')
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -195,7 +261,11 @@ test_cases = [
         },
         cls=GcpPubsubTopic,
         resource_type='pubsub.googleapis.com/Topic',
-        name='//pubsub.googleapis.com/projects/my_project/topics/my_resource'
+        name='//pubsub.googleapis.com/projects/my_project/topics/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name"}'),
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -204,7 +274,12 @@ test_cases = [
         },
         cls=GcpSqlInstance,
         resource_type='sqladmin.googleapis.com/Instance',
-        name='//cloudsql.googleapis.com/projects/my_project/instances/my_resource'
+        name='//cloudsql.googleapis.com/projects/my_project/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name" , "state":"RUNNABLE"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier=None
     ),
     ResourceTestCase(
         resource_data={
@@ -215,7 +290,12 @@ test_cases = [
         resource_type='storage.googleapis.com/Bucket',
         # This should include the collection name `/buckets/`, but CAI doesn't do that
         # See: https://issuetracker.google.com/issues/131586763
-        name='//storage.googleapis.com/my_resource'
+        name='//storage.googleapis.com/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "timeCreated":"bucket_timeCreated"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='bucket_timeCreated'
     ),
     ResourceTestCase(
         resource_data={
@@ -225,7 +305,11 @@ test_cases = [
         },
         cls=GcpComputeSubnetwork,
         resource_type='compute.googleapis.com/Subnetwork',
-        name='//compute.googleapis.com/projects/my_project/regions/us-central1/subnetworks/my_resource'
+        name='//compute.googleapis.com/projects/my_project/regions/us-central1/subnetworks/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "id":"subnetwork_id"}'),
+        ]),
+        uniquifier='subnetwork_id'
     ),
     ResourceTestCase(
         resource_data={
@@ -234,7 +318,11 @@ test_cases = [
         },
         cls=GcpComputeFirewall,
         resource_type='compute.googleapis.com/Firewall',
-        name='//compute.googleapis.com/projects/my_project/global/firewalls/my_resource'
+        name='//compute.googleapis.com/projects/my_project/global/firewalls/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "id":"firewall_id"}'),
+        ]),
+        uniquifier='firewall_id'
     ),
     ResourceTestCase(
         resource_data={
@@ -244,7 +332,11 @@ test_cases = [
         },
         cls=GcpDataflowJob,
         resource_type='dataflow.googleapis.com/Job',
-        name='//dataflow.googleapis.com/projects/my_project/locations/us-central1/jobs/my_resource'
+        name='//dataflow.googleapis.com/projects/my_project/locations/us-central1/jobs/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "id":"dataflow_id"}'),
+        ]),
+        uniquifier='dataflow_id'
     ),
     ResourceTestCase(
         resource_data={
@@ -254,7 +346,12 @@ test_cases = [
         },
         cls=GcpRedisInstance,
         resource_type='redis.googleapis.com/Instance',
-        name='//redis.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource'
+        name='//redis.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "createTime":"redis_createTime", "state":"READY"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='redis_createTime'
     ),
     ResourceTestCase(
         resource_data={
@@ -264,7 +361,12 @@ test_cases = [
         },
         cls=GcpMemcacheInstance,
         resource_type='memcache.googleapis.com/Instance',
-        name='//memcache.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource'
+        name='//memcache.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"name":"name", "createTime":"memcache_createTime", "state":"READY"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='memcache_createTime'
     ),
 ]
 
@@ -277,7 +379,12 @@ location_test_cases = [
         },
         cls=GcpRedisInstance,
         resource_type='redis.googleapis.com/Instance',
-        name='//redis.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource'
+        name='//redis.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"createTime":"createTime"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='startTime'
     ),
     ResourceTestCase(
         resource_data={
@@ -287,7 +394,12 @@ location_test_cases = [
         },
         cls=GcpMemcacheInstance,
         resource_type='memcache.googleapis.com/Instance',
-        name='//memcache.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource'
+        name='//memcache.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource',
+        http=HttpMockSequence([
+            ({'status': 200}, '{"createTime":"createTime"}'),
+            ({'status': 200}, '{}'),
+        ]),
+        uniquifier='createTime'
     ),
 ]
 
@@ -297,9 +409,10 @@ location_test_cases = [
     test_cases,
     ids=[case.cls.__name__ for case in test_cases])
 def test_gcp_from_resource(case):
-    r = GoogleAPIResource.from_resource_data(resource_type=case.resource_type, client_kwargs=client_kwargs, **case.resource_data)
+    r = GoogleAPIResource.from_resource_data(resource_type=case.resource_type, http=case.http, **case.resource_data)
     assert r.__class__ == case.cls
     assert isinstance(r._get_request_args(), dict)
+    assert r.uniquifier == case.uniquifier
 
 
 def test_gcp_from_resource_no_type():
@@ -353,3 +466,4 @@ def test_gcp_to_dict():
     data = r.to_dict()
     # with no creds, we should still get this key but it should be none
     assert data['project_id'] == test_project
+

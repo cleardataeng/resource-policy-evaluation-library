@@ -38,6 +38,8 @@ class GoogleAPIResource(Resource):
     # Other properties of a resource we might need to perform evaluations, such as iam policy
     resource_components = {}
 
+    uniquifier_path = None
+
     # If a resource is not in a ready state, we can't update it. If we retrieve
     # it, and the state changes, updates will be rejected because the ETAG will
     # have changed. If a resource defines readiness criteria, the get() call
@@ -48,11 +50,12 @@ class GoogleAPIResource(Resource):
     readiness_value = None
     readiness_terminal_values = []
 
-    def __init__(self, client_kwargs=None, **resource_data):
+    def __init__(self, client_kwargs=None, http=None, **resource_data):
 
         if client_kwargs is None:
             client_kwargs = {}
 
+        self._http = http
         # Set some defaults
         self._service = None
         self._resource_metadata = None
@@ -126,14 +129,14 @@ class GoogleAPIResource(Resource):
             raise ResourceException('Unrecognized resource type: {}'.format(resource_type))
 
     @classmethod
-    def from_resource_data(cls, *, resource_type, client_kwargs=None, **resource_data):
+    def from_resource_data(cls, *, resource_type, client_kwargs=None, http=None, **resource_data):
         if client_kwargs is None:
             client_kwargs = {}
         res_cls = cls.subclass_by_type(resource_type)
-        return res_cls(client_kwargs=client_kwargs, **resource_data)
+        return res_cls(client_kwargs=client_kwargs, http=http, **resource_data)
 
     @staticmethod
-    def from_cai_data(resource_name, resource_type, project_id=None, client_kwargs=None):
+    def from_cai_data(resource_name, resource_type, project_id=None, client_kwargs=None, http=None):
         ''' Attempt to return the appropriate resource using Cloud Asset Inventory-formatted resource info '''
 
         if client_kwargs is None:
@@ -149,6 +152,7 @@ class GoogleAPIResource(Resource):
 
         return res_cls(
             client_kwargs=client_kwargs,
+            http=http,
             **resource_data
         )
 
@@ -331,7 +335,7 @@ class GoogleAPIResource(Resource):
         # if the resource_data doesn't include the project_id (ex: with storage buckets) this will also fail
         try:
             resource_manager_projects = build_subresource(
-                'cloudresourcemanager.projects', 'v1', **self._client_kwargs
+                'cloudresourcemanager.projects', 'v1', **self._client_kwargs, http=self._http
             )
 
             resp = resource_manager_projects.getAncestry(
@@ -381,12 +385,12 @@ class GoogleAPIResource(Resource):
                 self.service_name,
                 self.resource_path
             )
-
             self._service = build_subresource(
-                full_resource_path,
-                self.version,
-                **self._client_kwargs
-            )
+                    full_resource_path,
+                    self.version,
+                    **self._client_kwargs,
+                    http=self._http
+                )
         return self._service
 
     @property
@@ -409,6 +413,21 @@ class GoogleAPIResource(Resource):
     def location(self):
         return self._resource_data.get('location')
 
+    # The full_resource_name is universally unique, but only at a point in time. If a resource is deleted,
+    # and a new one created, with the same name/location/etc, the full_resource_name alone won't distinguish
+    # those 2 resources. This field attempts to define an identifier that, when combined with the
+    # full_resource_name, should be universally unique over time. In some cases, google actually
+    # provides resource-specific unique IDs (for example: the compute API). In other cases we may use the
+    # creation timestamp of the resource. Not all resources have fields that make this  possible.
+    @property
+    def uniquifier(self):
+        if not self.uniquifier_path:
+            return None
+
+        resource_metadata = self.get(refresh=False).get('resource')
+        return jmespath.search(self.uniquifier_path, resource_metadata)
+
+
 
 class GcpAppEngineInstance(GoogleAPIResource):
 
@@ -421,6 +440,8 @@ class GcpAppEngineInstance(GoogleAPIResource):
     resource_type = 'appengine.googleapis.com/Instance'  # this is made-up based on existing appengine types
 
     required_resource_data = ['name', 'app', 'service', 'version']
+
+    uniquifier_path = 'startTime'
 
     def _get_request_args(self):
         return {
@@ -440,6 +461,8 @@ class GcpBigqueryDataset(GoogleAPIResource):
     required_resource_data = ['name', 'project_id']
 
     resource_type = "bigquery.googleapis.com/Dataset"
+
+    uniquifier_path = 'id'
 
     def _get_request_args(self):
         return {
@@ -528,6 +551,8 @@ class GcpComputeInstance(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Instance"
 
+    uniquifier_path = 'id'
+
     def _get_request_args(self):
         return {
             'instance': self._resource_data['name'],
@@ -545,6 +570,8 @@ class GcpComputeDisk(GoogleAPIResource):
     required_resource_data = ['name', 'location', 'project_id']
 
     resource_type = "compute.googleapis.com/Disk"
+
+    uniquifier_path = 'id'
 
     def _get_request_args(self):
         return {
@@ -564,6 +591,8 @@ class GcpComputeRegionDisk(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/RegionDisk"
 
+    uniquifier_path = 'id'
+
     def _get_request_args(self):
         return {
             'project': self._resource_data['project_id'],
@@ -582,6 +611,8 @@ class GcpComputeNetwork(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Network"
 
+    uniquifier_path = 'id'
+
     def _get_request_args(self):
         return {
             'project': self._resource_data['project_id'],
@@ -598,6 +629,8 @@ class GcpComputeSubnetwork(GoogleAPIResource):
     required_resource_data = ['name', 'location', 'project_id']
 
     resource_type = "compute.googleapis.com/Subnetwork"
+
+    uniquifier_path = 'id'
 
     def _get_request_args(self):
         return {
@@ -617,6 +650,8 @@ class GcpComputeFirewall(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Firewall"
 
+    uniquifier_path = 'id'
+
     def _get_request_args(self):
         return {
             'firewall': self._resource_data['name'],
@@ -632,6 +667,8 @@ class GcpDataprocCluster(GoogleAPIResource):
     required_resource_data = ['name', 'location', 'project_id']
 
     resource_type = "dataproc.googleapis.com/Cluster"
+
+    uniquifier_path = 'clusterUuid'
 
     def _get_request_args(self):
         return {
@@ -657,6 +694,8 @@ class GcpDatafusionInstance(GoogleAPIResource):
     }
 
     resource_type = "datafusion.googleapis.com/Instance"
+
+    uniquifier_path = 'createTime'
 
     def _get_request_args(self):
         return {
@@ -691,6 +730,8 @@ class GcpGkeCluster(GoogleAPIResource):
     resource_labels_path = "resource.resourceLabels"
 
     resource_type = "container.googleapis.com/Cluster"
+
+    uniquifier_path = 'id'
 
     def _get_request_args(self):
         return {
@@ -736,6 +777,8 @@ class GcpIamServiceAccount(GoogleAPIResource):
 
     resource_type = 'iam.googleapis.com/ServiceAccount'
 
+    uniquifier_path = 'uniqueId'
+
     def _get_request_args(self):
         return {
             'name': 'projects/{}/serviceAccounts/{}'.format(
@@ -754,6 +797,8 @@ class GcpIamServiceAccountKey(GoogleAPIResource):
     required_resource_data = ['name', 'service_account', 'project_id']
 
     resource_type = 'iam.googleapis.com/ServiceAccountKey'
+
+    uniquifier_path = 'privateKeyData'
 
     def _get_request_args(self):
         return {
@@ -841,6 +886,8 @@ class GcpStorageBucket(GoogleAPIResource):
 
     resource_type = "storage.googleapis.com/Bucket"
 
+    uniquifier_path = 'timeCreated'
+
     def _get_request_args(self):
         return {
             'bucket': self._resource_data['name'],
@@ -902,6 +949,8 @@ class GcpProject(GoogleAPIResource):
 
     resource_type = "cloudresourcemanager.googleapis.com/Project"  # beta
 
+    uniquifier_path = 'projectNumber'
+
     def _get_request_args(self):
         return {
             'projectId': self._resource_data['name']
@@ -943,6 +992,8 @@ class GcpDataflowJob(GoogleAPIResource):
 
     resource_type = 'dataflow.googleapis.com/Job'
 
+    uniquifier_path = 'id'
+
     def _get_request_args(self):
         return {
             'jobId': self._resource_data['name'],
@@ -965,6 +1016,8 @@ class GcpRedisInstance(GoogleAPIResource):
     required_resource_data = ['name', 'project_id', 'location']
 
     resource_type = 'redis.googleapis.com/Instance'
+
+    uniquifier_path = 'createTime'
 
     def _get_request_args(self):
         return {
@@ -990,6 +1043,8 @@ class GcpMemcacheInstance(GoogleAPIResource):
 
     resource_type = 'memcache.googleapis.com/Instance'
 
+    uniquifier_path = 'createTime'
+
     def _get_request_args(self):
         return {
             'name': 'projects/{}/locations/{}/instances/{}'.format(
@@ -998,3 +1053,4 @@ class GcpMemcacheInstance(GoogleAPIResource):
                 self._resource_data['name']
             ),
         }
+
