@@ -13,4 +13,4 @@
 # limitations under the License.
 
 
-from .base import Resource    # noqa F401
+from .base import Resource  # noqa F401

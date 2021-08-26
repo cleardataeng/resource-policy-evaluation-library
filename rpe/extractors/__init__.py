@@ -14,6 +14,6 @@
 
 
 class Extractor:
-    '''Extract resoruces from stuctured data, such as log messages'''
+    """Extract resoruces from stuctured data, such as log messages"""
 
     pass

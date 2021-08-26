@@ -29,14 +29,13 @@ class PythonPolicyEngine:
         self._policies = {}
         self.package_path = package_path
         PythonPolicyEngine.counter += 1
-        self.package_name = 'rpe.plugins.policies.py_' + str(PythonPolicyEngine.counter)
+        self.package_name = "rpe.plugins.policies.py_" + str(PythonPolicyEngine.counter)
 
         self._load_policies()
 
     def _load_policies(self):
         spec = importlib.util.spec_from_file_location(
-            self.package_name,
-            "{}/__init__.py".format(self.package_path)
+            self.package_name, "{}/__init__.py".format(self.package_path)
         )
         module = importlib.util.module_from_spec(spec)
         sys.modules[self.package_name] = module
@@ -44,7 +43,11 @@ class PythonPolicyEngine:
         spec.loader.exec_module(module)
 
         for name, obj in inspect.getmembers(module):
-            if inspect.isclass(obj) and hasattr(obj, 'applies_to') and isinstance(obj.applies_to, list):
+            if (
+                inspect.isclass(obj)
+                and hasattr(obj, "applies_to")
+                and isinstance(obj.applies_to, list)
+            ):
                 self._policies[name] = obj
 
     def policies(self):
@@ -58,7 +61,7 @@ class PythonPolicyEngine:
                 policy_id=policy_name,
                 engine=self,
                 applies_to=policy_cls.applies_to,
-                description=policy_cls.description
+                description=policy_cls.description,
             )
             for policy_name, policy_cls in self._policies.items()
         ]
@@ -66,10 +69,12 @@ class PythonPolicyEngine:
         return policies
 
     def evaluate(self, resource):
-        matched_policies = dict(filter(
-            lambda policy: resource.type() in policy[1].applies_to,
-            self._policies.items()
-        ))
+        matched_policies = dict(
+            filter(
+                lambda policy: resource.type() in policy[1].applies_to,
+                self._policies.items(),
+            )
+        )
 
         # Loop over policy and build evals, so we can catch exceptions
 
@@ -88,14 +93,14 @@ class PythonPolicyEngine:
                     policy_id=policy_name,
                     compliant=compliant,
                     excluded=excluded,
-                    remediable=hasattr(policy_cls, 'remediate')
+                    remediable=hasattr(policy_cls, "remediate"),
                 )
 
                 evals.append(ev)
 
             # These are user-provided modules, we need to catch any exception
             except Exception as e:
-                print(f'Evaluation exception. Policy: {policy_name}, Message: {str(e)}')
+                print(f"Evaluation exception. Policy: {policy_name}, Message: {str(e)}")
 
         return evals
 
