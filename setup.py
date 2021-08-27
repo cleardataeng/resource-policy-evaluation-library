@@ -13,30 +13,30 @@
 # limitations under the License.
 
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="rpe-lib",
     classifiers=[
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     description="A resource policy evaluation library",
-    long_description=open('README.md').read(),
+    long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="Joe Ceresini",
     url="https://github.com/cleardataeng/resource-policy-evaluation-library",
     use_scm_version=True,
-    setup_requires=['setuptools_scm'],
+    setup_requires=["setuptools_scm"],
     install_requires=[
-        'google-api-python-client',
-        'google-api-python-client-helpers',
-        'jmespath',
-        'tenacity',
-        'python-dateutil'
+        "google-api-python-client",
+        "google-api-python-client-helpers",
+        "jmespath",
+        "tenacity",
+        "python-dateutil",
     ],
-    packages=find_packages(include=['rpe*']),
+    packages=find_packages(include=["rpe*"]),
     package_data={},
     license="Apache 2.0",
     keywords="gcp policy enforcement",

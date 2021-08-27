@@ -12,6 +12,7 @@ As an example, for GCP resources, the `remediate()` function expects details abo
 
 [![Build Status](https://github.com/cleardataeng/resource-policy-evaluation-library/actions/workflows/build.yml/badge.svg)](https://github.com/cleardataeng/resource-policy-evaluation-library/actions/workflows/build.yml)
 [![PyPI version](https://badge.fury.io/py/rpe-lib.svg)](https://badge.fury.io/py/rpe-lib)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ---
 

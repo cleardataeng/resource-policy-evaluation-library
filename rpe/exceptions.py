@@ -27,7 +27,7 @@ def is_retryable_exception(err):
 
     """
     if isinstance(err, HttpError):
-        if err.resp.status == 400 and 'resourceNotReady' in err.content.decode('utf-8'):
+        if err.resp.status == 400 and "resourceNotReady" in err.content.decode("utf-8"):
             return True
         else:
             return err.resp.status in [409]
