@@ -55,6 +55,8 @@ class GoogleAPIResource(Resource):
     readiness_value = None
     readiness_terminal_values = []
 
+    inferred_data_map = None
+
     def __init__(self, client_kwargs=None, http=None, **resource_data):
 
         if client_kwargs is None:
@@ -156,6 +158,9 @@ class GoogleAPIResource(Resource):
         return res_cls(client_kwargs=client_kwargs, http=http, **resource_data)
 
     def to_dict(self):
+
+        self._refresh_inferred_data()
+
         details = self._resource_data.copy()
         details.update(
             {
@@ -169,6 +174,26 @@ class GoogleAPIResource(Resource):
             details["full_resource_name"] = None
 
         return details
+
+    # Some useful resource data may not be available when instantiated
+    def _refresh_inferred_data(self):
+
+        if not self.inferred_data_map:
+            return
+
+        try:
+            resource_metadata = self.get(refresh=False)["resource"]
+        except Exception:
+            return
+
+        for key, path in self.inferred_data_map.items():
+            # Don't replace existing data
+            if key in self._resource_data:
+                continue
+            value = jmespath.search(path, resource_metadata)
+
+            if value is not None:
+                self._resource_data[key] = value
 
     def type(self):
         return self.resource_type
@@ -900,6 +925,10 @@ class GcpStorageBucket(GoogleAPIResource):
     resource_type = "storage.googleapis.com/Bucket"
 
     uniquifier_path = "timeCreated"
+
+    inferred_data_map = {
+        "location": "location",
+    }
 
     def _get_request_args(self):
         return {
