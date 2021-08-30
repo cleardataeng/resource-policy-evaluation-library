@@ -43,8 +43,6 @@ class GoogleAPIResource(Resource):
     # Other properties of a resource we might need to perform evaluations, such as iam policy
     resource_components = {}
 
-    uniquifier_path = None
-
     # If a resource is not in a ready state, we can't update it. If we retrieve
     # it, and the state changes, updates will be rejected because the ETAG will
     # have changed. If a resource defines readiness criteria, the get() call
@@ -54,6 +52,8 @@ class GoogleAPIResource(Resource):
     readiness_key = None
     readiness_value = None
     readiness_terminal_values = []
+
+    inferred_data_map = None
 
     def __init__(self, client_kwargs=None, http=None, **resource_data):
 
@@ -156,6 +156,9 @@ class GoogleAPIResource(Resource):
         return res_cls(client_kwargs=client_kwargs, http=http, **resource_data)
 
     def to_dict(self):
+
+        self._refresh_inferred_data()
+
         details = self._resource_data.copy()
         details.update(
             {
@@ -169,6 +172,26 @@ class GoogleAPIResource(Resource):
             details["full_resource_name"] = None
 
         return details
+
+    # Some useful resource data may not be available when instantiated
+    def _refresh_inferred_data(self):
+
+        if not self.inferred_data_map:
+            return
+
+        try:
+            resource_metadata = self.get(refresh=False)["resource"]
+        except Exception:
+            return
+
+        for key, path in self.inferred_data_map.items():
+            # Don't replace existing data
+            if key in self._resource_data:
+                continue
+            value = jmespath.search(path, resource_metadata)
+
+            if value is not None:
+                self._resource_data[key] = value
 
     def type(self):
         return self.resource_type
@@ -433,11 +456,9 @@ class GoogleAPIResource(Resource):
     # creation timestamp of the resource. Not all resources have fields that make this  possible.
     @property
     def uniquifier(self):
-        if not self.uniquifier_path:
-            return None
+        self._refresh_inferred_data()
 
-        resource_metadata = self.get(refresh=False).get("resource")
-        return jmespath.search(self.uniquifier_path, resource_metadata)
+        return self._resource_data.get("uniquifier")
 
 
 class GcpAppEngineInstance(GoogleAPIResource):
@@ -452,7 +473,9 @@ class GcpAppEngineInstance(GoogleAPIResource):
 
     required_resource_data = ["name", "app", "service", "version"]
 
-    uniquifier_path = "startTime"
+    inferred_data_map = {
+        "uniquifier": "startTime",
+    }
 
     def _get_request_args(self):
         return {
@@ -473,7 +496,9 @@ class GcpBigqueryDataset(GoogleAPIResource):
 
     resource_type = "bigquery.googleapis.com/Dataset"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -564,7 +589,9 @@ class GcpComputeInstance(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Instance"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -584,7 +611,9 @@ class GcpComputeDisk(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Disk"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -604,7 +633,9 @@ class GcpComputeRegionDisk(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/RegionDisk"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -624,7 +655,9 @@ class GcpComputeNetwork(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Network"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -643,7 +676,9 @@ class GcpComputeSubnetwork(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Subnetwork"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -663,7 +698,9 @@ class GcpComputeFirewall(GoogleAPIResource):
 
     resource_type = "compute.googleapis.com/Firewall"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -681,7 +718,9 @@ class GcpDataprocCluster(GoogleAPIResource):
 
     resource_type = "dataproc.googleapis.com/Cluster"
 
-    uniquifier_path = "clusterUuid"
+    inferred_data_map = {
+        "uniquifier": "clusterUuid",
+    }
 
     def _get_request_args(self):
         return {
@@ -708,7 +747,9 @@ class GcpDatafusionInstance(GoogleAPIResource):
 
     resource_type = "datafusion.googleapis.com/Instance"
 
-    uniquifier_path = "createTime"
+    inferred_data_map = {
+        "uniquifier": "createTime",
+    }
 
     def _get_request_args(self):
         return {
@@ -744,7 +785,9 @@ class GcpGkeCluster(GoogleAPIResource):
 
     resource_type = "container.googleapis.com/Cluster"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -795,7 +838,9 @@ class GcpIamServiceAccount(GoogleAPIResource):
 
     resource_type = "iam.googleapis.com/ServiceAccount"
 
-    uniquifier_path = "uniqueId"
+    inferred_data_map = {
+        "uniquifier": "uniqueId",
+    }
 
     def _get_request_args(self):
         return {
@@ -815,7 +860,9 @@ class GcpIamServiceAccountKey(GoogleAPIResource):
 
     resource_type = "iam.googleapis.com/ServiceAccountKey"
 
-    uniquifier_path = "privateKeyData"
+    inferred_data_map = {
+        "uniquifier": "privateKeyData",
+    }
 
     def _get_request_args(self):
         return {
@@ -899,7 +946,10 @@ class GcpStorageBucket(GoogleAPIResource):
 
     resource_type = "storage.googleapis.com/Bucket"
 
-    uniquifier_path = "timeCreated"
+    inferred_data_map = {
+        "location": "location",
+        "uniquifier": "timeCreated",
+    }
 
     def _get_request_args(self):
         return {
@@ -958,7 +1008,9 @@ class GcpProject(GoogleAPIResource):
 
     resource_type = "cloudresourcemanager.googleapis.com/Project"  # beta
 
-    uniquifier_path = "projectNumber"
+    inferred_data_map = {
+        "uniquifier": "projectNumber",
+    }
 
     def _get_request_args(self):
         return {"projectId": self._resource_data["name"]}
@@ -995,7 +1047,9 @@ class GcpDataflowJob(GoogleAPIResource):
 
     resource_type = "dataflow.googleapis.com/Job"
 
-    uniquifier_path = "id"
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
 
     def _get_request_args(self):
         return {
@@ -1020,7 +1074,9 @@ class GcpRedisInstance(GoogleAPIResource):
 
     resource_type = "redis.googleapis.com/Instance"
 
-    uniquifier_path = "createTime"
+    inferred_data_map = {
+        "uniquifier": "createTime",
+    }
 
     def _get_request_args(self):
         return {
@@ -1046,7 +1102,9 @@ class GcpMemcacheInstance(GoogleAPIResource):
 
     resource_type = "memcache.googleapis.com/Instance"
 
-    uniquifier_path = "createTime"
+    inferred_data_map = {
+        "uniquifier": "createTime",
+    }
 
     def _get_request_args(self):
         return {
