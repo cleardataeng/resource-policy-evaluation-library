@@ -15,19 +15,19 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
+from pydantic import BaseModel
 
 from google.pubsub_v1 import PubsubMessage
+import jmespath
 
 
-@dataclass
-class PubsubMessageMetadata:
+class PubsubMessageMetadata(BaseModel):
     publish_time: datetime
     message_id: str
     attributes: Optional[dict]
 
 
 def get_pubsub_message_metadata(message: PubsubMessage):
-
     return PubsubMessageMetadata(
         publish_time=message.publish_time,
         message_id=message.message_id,

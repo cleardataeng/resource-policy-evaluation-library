@@ -14,13 +14,14 @@
 
 from dataclasses import dataclass
 from typing import List
+from pydantic import BaseModel
 
 from rpe.resources.base import Resource
 
 
-@dataclass
-class ExtractedMetadata:
-    pass
+class ExtractedMetadata(BaseModel):
+    class Config:
+        extra = "allow"
 
 
 @dataclass

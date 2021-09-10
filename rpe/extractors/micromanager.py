@@ -14,6 +14,8 @@
 
 import json
 from dataclasses import asdict, dataclass
+from typing import Optional
+from pydantic import BaseModel
 
 from rpe.extractors import Extractor
 from rpe.extractors.models import ExtractedMetadata, ExtractedResources
@@ -24,7 +26,6 @@ from rpe.extractors.pubsub_metadata import (
 from rpe.resources.gcp import GoogleAPIResource
 
 
-@dataclass
 class MicromanagerMetadata(PubsubMessageMetadata, ExtractedMetadata):
     pass
 
@@ -38,12 +39,13 @@ class MicromanagerEvaluationRequest(Extractor):
         name = message_data.get("name")
         asset_type = message_data.get("asset_type")
         project_id = message_data.get("project_id")
+        metadata = message_data.get("metadata") or {}
+        metadata.update((get_pubsub_message_metadata(message)).dict())
 
         resource = GoogleAPIResource.from_cai_data(
             name, asset_type, project_id=project_id
         )
-        pubsub_metadata = get_pubsub_message_metadata(message)
 
-        metadata = MicromanagerMetadata(src="micromanager", **asdict(pubsub_metadata))
+        metadata = MicromanagerMetadata(**metadata)
 
         return ExtractedResources(resources=[resource], metadata=metadata)

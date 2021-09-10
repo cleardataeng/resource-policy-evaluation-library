@@ -1,0 +1,16 @@
+{ "data": {
+    "name": "//storage.googleapis.com/buckets/test-bucket",
+    "asset_type": "storage.googleapis.com/Bucket",
+    "project_id": "bucket-project-id",
+    "metadata": {
+      "src": "bucket"
+    },
+    "control_data": {
+      "enforce": true,
+      "delay_enforcement": false
+    }
+  },
+  "publish_time" : 1631209008.58924,
+  "message_id": "bucket-message-id",
+  "attributes": {"test": "attribute-bucket"}
+}
