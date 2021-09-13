@@ -3,3 +3,6 @@ google-api-python-client==2.0.2
 jmespath
 tenacity
 python-dateutil
+mock
+google-cloud-pubsub
+pydantic

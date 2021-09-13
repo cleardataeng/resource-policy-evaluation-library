@@ -1,0 +1,16 @@
+{ "data": {
+  "name": "//compute.googleapis.com/projects/asdf/zones/zone3/instances/test-instance",
+  "asset_type": "compute.googleapis.com/Instance",
+  "project_id": null,
+  "metadata": {
+    "src": "instance"
+  },
+  "control_data": {
+    "enforce": true,
+    "delay_enforcement": false
+  }
+},
+  "publish_time" : 1631209008.58924,
+  "message_id": "instance-message-id",
+  "attributes": {"test": "attribute-instance"}
+}

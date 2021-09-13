@@ -13,18 +13,23 @@
 # limitations under the License.
 
 from dataclasses import dataclass
-from typing import List
+from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel
 
-from rpe.resources.base import Resource
+from google.pubsub_v1 import PubsubMessage
+import jmespath
 
 
-class ExtractedMetadata(BaseModel):
-    class Config:
-        extra = "allow"
+class PubsubMessageMetadata(BaseModel):
+    publish_time: datetime
+    message_id: str
+    attributes: Optional[dict]
 
 
-@dataclass
-class ExtractedResources:
-    resources: List[Resource]
-    metadata: ExtractedMetadata
+def get_pubsub_message_metadata(message: PubsubMessage):
+    return PubsubMessageMetadata(
+        publish_time=message.publish_time,
+        message_id=message.message_id,
+        attributes=dict(message.attributes),
+    )

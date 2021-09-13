@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Optional
+from pydantic import BaseModel
 
 import dateutil.parser
 import jmespath
@@ -27,7 +28,6 @@ from rpe.extractors.models import ExtractedMetadata, ExtractedResources
 from rpe.resources.gcp import GoogleAPIResource
 
 
-@dataclass
 class OperationEnum(str, Enum):
     create = "create"
     read = "read"
@@ -35,7 +35,6 @@ class OperationEnum(str, Enum):
     delete = "delete"
 
 
-@dataclass
 class GCPAuditLogMetadata(ExtractedMetadata):
     id: str
     timestamp: datetime

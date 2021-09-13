@@ -2,10 +2,12 @@ import json
 import os
 
 import pytest
+import mock
 
 from rpe.exceptions import ExtractorException
 from rpe.extractors.gcp_auditlogs import GCPAuditLog
-from rpe.resources.gcp import GcpComputeDisk
+from rpe.resources.gcp import GcpComputeDisk, GcpComputeInstance, GcpStorageBucket
+from rpe.extractors.micromanager import MicromanagerEvaluationRequest
 
 
 def get_test_data(filename):
@@ -208,6 +210,33 @@ test_single_asset_log_params = [
     ),
 ]
 
+test_micromanager_log = [
+    (
+        "compute_instance_micromanager.json",
+        "test-instance",
+        GcpComputeInstance,
+        True,
+        "instance",
+        "instance-message-id",
+    ),
+    (
+        "storage_bucket_micromanager.json",
+        "test-bucket",
+        GcpStorageBucket,
+        True,
+        "bucket",
+        "bucket-message-id",
+    ),
+    (
+        "storage_bucket_no_metadata_micromanager.json",
+        "test-bucket",
+        GcpStorageBucket,
+        False,
+        {},
+        "bucket-message-id",
+    ),
+]
+
 test_log_resource_count_params = [
     ("serviceusage-batchenable.json", 3),
     ("compute-hardened-images.json", 3),
@@ -231,6 +260,40 @@ def test_single_asset_log_messages(
     assert resource.resource_type == expected_resource_type
     assert extracted.metadata.operation == expected_operation_type
     assert resource.resource_name == expected_resource_name
+
+
+@pytest.mark.parametrize(
+    "filename, expected_resource_name, expected_resource_class, has_message_metadata, "
+    "expected_message_metadata, expected_message_id",
+    test_micromanager_log,
+)
+def test_micromanager_extractor(
+    filename,
+    expected_resource_name,
+    expected_resource_class,
+    has_message_metadata,
+    expected_message_metadata,
+    expected_message_id,
+):
+    log_message = get_test_data(filename)
+    mock_context = mock.Mock(spec=["data", "publish_time", "message_id", "attributes"])
+    mock_context.data = json.dumps(log_message.get("data"), indent=2).encode("utf-8")
+    mock_context.publish_time = log_message.get("publish_time")
+    mock_context.message_id = log_message.get("message_id")
+    mock_context.attributes = log_message.get("attributes")
+
+    extracted = MicromanagerEvaluationRequest.extract(mock_context)
+
+    assert len(extracted.resources) == 1
+    resource = extracted.resources[0]
+    metadata = extracted.metadata
+
+    assert resource.resource_name == expected_resource_name
+    assert resource.__class__ == expected_resource_class
+    assert hasattr(metadata, "src") == has_message_metadata
+    if hasattr(metadata, "src"):
+        assert metadata.src == expected_message_metadata
+    assert metadata.message_id == expected_message_id
 
 
 @pytest.mark.parametrize(
