@@ -33,6 +33,15 @@ evaluate = [{
 	name := matched_policies[_]
 ]
 
+evaluate_v2 = [{
+	"policy_id": name,
+	"compliant": object.get(data.rpe.policy[name], "compliant", false),
+	"policy_attributes": object.get(data.rpe.policy[name], "policy_attributes", {}),
+	"evaluation_attributes": object.get(data.rpe.policy[name], "evaluation_attributes", {}),
+} |
+	name := matched_policies[_]
+]
+
 matched_policies = sort([name |
 	p = data.rpe.policy[name]
 	input.type == p.applies_to[_]
