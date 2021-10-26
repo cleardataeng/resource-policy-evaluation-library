@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import Any, Dict, List, Optional
 
 from rpe.engines import Engine
 from rpe.resources import Resource
@@ -20,8 +20,23 @@ class Evaluation:
     policy_id: str
 
     compliant: bool
-    excluded: bool
     remediable: bool
+
+    # Static attributes on a given policy
+    # Examples: severity, description, owner, etc.
+    policy_attributes: Optional[Dict[str, Any]] = None
+
+    # Calculated attributes when evaluating the policy against a resource
+    # Examples:
+    #   * Why was a resource (non)compliant?
+    #   * The prior `excluded` attribute can be implemented here
+    evaluation_attributes: Optional[Dict[str, Any]] = None
 
     def remediate(self):
         return self.engine.remediate(self.resource, self.policy_id)
+
+    # This is to support the same interface as previous versions
+    # and may be removed in a future release
+    @property
+    def excluded(self) -> bool:
+        return self.evaluation_attributes.get("excluded", False)

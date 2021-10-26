@@ -55,7 +55,7 @@ class OpenPolicyAgent(Engine):
             "input": resource.get(),
         }
 
-        evals = self._opa_request("rpe/evaluate", method="POST", data=input)
+        evals = self._opa_request("rpe/evaluate_v2", method="POST", data=input)
 
         return [Evaluation(engine=self, resource=resource, **ev) for ev in evals]
 
