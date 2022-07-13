@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from rpe.engines import Engine
@@ -24,13 +24,13 @@ class Evaluation:
 
     # Static attributes on a given policy
     # Examples: severity, description, owner, etc.
-    policy_attributes: Optional[Dict[str, Any]] = None
+    policy_attributes: Optional[Dict[str, Any]] = field(default_factory=dict)
 
     # Calculated attributes when evaluating the policy against a resource
     # Examples:
     #   * Why was a resource (non)compliant?
     #   * The prior `excluded` attribute can be implemented here
-    evaluation_attributes: Optional[Dict[str, Any]] = None
+    evaluation_attributes: Optional[Dict[str, Any]] = field(default_factory=dict)
 
     def remediate(self):
         return self.engine.remediate(self.resource, self.policy_id)
