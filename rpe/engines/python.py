@@ -83,26 +83,33 @@ class PythonPolicyEngine:
         for policy_name, policy_cls in matched_policies.items():
             try:
 
-                # Ensure that these are boolean
-                compliant = policy_cls.compliant(resource) is True
-                excluded = policy_cls.excluded(resource) is True
+                if hasattr(policy_cls, "evaluate"):
+                    evals.append(policy_cls.evaluate(self, resource))
 
-                ev = Evaluation(
-                    resource=resource,
-                    engine=self,
-                    policy_id=policy_name,
-                    compliant=compliant,
-                    excluded=excluded,
-                    remediable=hasattr(policy_cls, "remediate"),
-                )
-
-                evals.append(ev)
+                else:
+                    evals.append(self._legacy_eval(resource, policy_name, policy_cls))
 
             # These are user-provided modules, we need to catch any exception
             except Exception as e:
                 print(f"Evaluation exception. Policy: {policy_name}, Message: {str(e)}")
 
         return evals
+
+    def _legacy_eval(self, resource, policy_name, policy_cls):
+        compliant = policy_cls.compliant(resource) is True
+
+        eval_attr = {"excluded": policy_cls.excluded(resource) is True}
+
+        ev = Evaluation(
+            resource=resource,
+            engine=self,
+            policy_id=policy_name,
+            compliant=compliant,
+            remediable=hasattr(policy_cls, "remediate"),
+            evaluation_attributes=eval_attr,
+        )
+
+        return ev
 
     def remediate(self, resource, policy_id):
         policy_cls = self._policies[policy_id]
