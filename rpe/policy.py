@@ -40,3 +40,7 @@ class Evaluation:
     @property
     def excluded(self) -> bool:
         return self.evaluation_attributes.get("excluded", False)
+
+    @excluded.setter
+    def excluded(self, value):
+        self.evaluation_attributes["excluded"] = value
