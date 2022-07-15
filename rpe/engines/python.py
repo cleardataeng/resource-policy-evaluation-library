@@ -17,7 +17,9 @@ import importlib.util
 import inspect
 import sys
 
-from rpe.policy import Evaluation, Policy
+from dataclasses import asdict
+
+from rpe.policy import Evaluation, EvaluationResult, Policy
 
 
 class PythonPolicyEngine:
@@ -84,7 +86,19 @@ class PythonPolicyEngine:
             try:
 
                 if hasattr(policy_cls, "evaluate"):
-                    evals.append(policy_cls.evaluate(self, resource))
+                    eval_result = policy_cls.evaluate(resource)
+                    if not isinstance(eval_result, EvaluationResult):
+                        raise ValueError(
+                            'Python policy "evaluate" function must return an EvaluationResult object'
+                        )
+
+                    full_eval = Evaluation(
+                        resource=resource,
+                        engine=self,
+                        policy_id=policy_name,
+                        **asdict(eval_result),
+                    )
+                    evals.append(full_eval)
 
                 else:
                     evals.append(self._legacy_eval(resource, policy_name, policy_cls))
