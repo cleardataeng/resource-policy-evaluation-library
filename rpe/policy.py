@@ -13,6 +13,8 @@ class Policy:
     description: str = ""
 
 
+# This is broken into its own class so we can create the Evaluation object and
+# control the order of the dataclass attributes
 @dataclass
 class _EvaluationTrigger:
     resource: Resource
