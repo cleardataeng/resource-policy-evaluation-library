@@ -92,7 +92,7 @@ class GoogleAPIResource(Resource):
 
         # Most resources need only a subset of these fields to query the google apis
         fields = {
-            "project_id": r"/projects/([^\/]+)/",
+            "project_id": r"/projects/([^\/]+)(/.*)?$",
             "location": r"/(?:locations|regions|zones)/([^\/]+)/",
             "name": r"([^\/]+)$",
             # Less-common resource data
