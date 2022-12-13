@@ -64,6 +64,7 @@ class PythonPolicyEngine:
                 engine=self,
                 applies_to=policy_cls.applies_to,
                 description=policy_cls.description,
+                policy_attributes=getattr(policy_cls, "policy_attributes", {}),
             )
             for policy_name, policy_cls in self._policies.items()
         ]
