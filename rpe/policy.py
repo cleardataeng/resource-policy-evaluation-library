@@ -11,7 +11,7 @@ class Policy:
     engine: Engine
     applies_to: List[str]
     description: str = ""
-    policy_attributes: dict[str, str] = field(default_factory=dict)
+    policy_attributes: Dict[str, str] = field(default_factory=dict)
 
 
 # This is broken into its own class so we can create the Evaluation object and
