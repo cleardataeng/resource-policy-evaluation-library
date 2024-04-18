@@ -32,6 +32,8 @@ from rpe.resources.gcp import (
     GcpDataflowJob,
     GcpDatafusionInstance,
     GcpDataprocCluster,
+    GcpDataformRepository,
+    GcpDataformWorkspace,
     GcpGkeCluster,
     GcpGkeClusterNodepool,
     GcpMemcacheInstance,
@@ -428,6 +430,41 @@ location_test_cases = [
         cls=GcpMemcacheInstance,
         resource_type="memcache.googleapis.com/Instance",
         name="//memcache.googleapis.com/projects/my_project/locations/us-central1/instances/my_resource",
+        http=HttpMockSequence(
+            [
+                ({"status": 200}, '{"createTime":"createTime"}'),
+                ({"status": 200}, "{}"),
+            ]
+        ),
+        uniquifier="createTime",
+    ),
+    ResourceTestCase(
+        resource_data={
+            "name": test_resource_name,
+            "location": "us-central1",
+            "project_id": test_project,
+        },
+        cls=GcpDataformRepository,
+        resource_type="dataform.googleapis.com/Repository",
+        name="//dataform.googleapis.com/projects/my_project/locations/us-central1/repositories/my_resource",
+        http=HttpMockSequence(
+            [
+                ({"status": 200}, '{"createTime":"createTime"}'),
+                ({"status": 200}, "{}"),
+            ]
+        ),
+        uniquifier="createTime",
+    ),
+    ResourceTestCase(
+        resource_data={
+            "name": test_resource_name,
+            "location": "us-central1",
+            "project_id": test_project,
+            "repository": "test_repository"
+        },
+        cls=GcpDataformWorkspace,
+        resource_type="dataform.googleapis.com/Workspace",
+        name="//dataform.googleapis.com/projects/my_project/locations/us-central1/repositories/test_repository/workspaces/test_resource_name",
         http=HttpMockSequence(
             [
                 ({"status": 200}, '{"createTime":"createTime"}'),

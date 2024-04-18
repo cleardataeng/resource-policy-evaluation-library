@@ -32,6 +32,8 @@ from rpe.resources.gcp import (
     GcpDataflowJob,
     GcpDatafusionInstance,
     GcpDataprocCluster,
+    GcpDataformRepository,
+    GcpDataformWorkspace,
     GcpGkeCluster,
     GcpGkeClusterNodepool,
     GcpIamServiceAccount,
@@ -227,6 +229,20 @@ test_cases = [
             "asset_type": "memcache.googleapis.com/Instance",
         },
         resource_cls=GcpMemcacheInstance,
+    ),
+    CaiTestCase(
+        data={
+            "name": "//dataform.googleapis.com/projects/test-project/locations/us-central1/repositories/test-resource",
+            "asset_type": "dataform.googleapis.com/Repository",
+        },
+        resource_cls=GcpDataformRepository,
+    ),
+    CaiTestCase(
+        data={
+            "name": "//dataform.googleapis.com/projects/test-project/locations/us-central1/repositories/test-repository/workspaces/test-resource",
+            "asset_type": "dataform.googleapis.com/Workspace",
+        },
+        resource_cls=GcpDataformWorkspace,
     ),
 ]
 

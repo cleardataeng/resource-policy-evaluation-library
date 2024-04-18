@@ -104,6 +104,8 @@ class GoogleAPIResource(Resource):
             "cluster": r"/clusters/([^\/]+)/",
             # ServiceAccounts
             "service_account": r"serviceAccounts/([^\/]+)/",
+            # Dataform
+            "repository": r"/repositories/([^\/]+)/",
         }
 
         resource_data = {}
@@ -1111,6 +1113,78 @@ class GcpMemcacheInstance(GoogleAPIResource):
             "name": "projects/{}/locations/{}/instances/{}".format(
                 self._resource_data["project_id"],
                 self._resource_data["location"],
+                self._resource_data["name"],
+            ),
+        }
+
+
+class GcpDataformRepository(GoogleAPIResource):
+
+    service_name = "dataform"
+    resource_path = "projects.locations.repositories"
+    version = "v1beta1"
+
+    required_resource_data = ["name", "location", "project_id"]
+
+    resource_components = {
+        "iam": "getIamPolicy",
+    }
+
+    resource_type = "dataform.googleapis.com/Repository"
+
+    inferred_data_map = {
+        "uniquifier": "createTime",
+    }
+
+    def _get_request_args(self):
+        return {
+            "name": "projects/{}/locations/{}/repositories/{}".format(
+                self._resource_data["project_id"],
+                self._resource_data["location"],
+                self._resource_data["name"],
+            ),
+        }
+
+    def _get_iam_request_args(self):
+        return {
+            "resource": "projects/{}/locations/{}/repositories/{}".format(
+                self._resource_data["project_id"],
+                self._resource_data["location"],
+                self._resource_data["name"],
+            ),
+        }
+
+
+class GcpDataformWorkspace(GoogleAPIResource):
+
+    service_name = "dataform"
+    resource_path = "projects.locations.repositories.workspaces"
+    version = "v1beta1"
+
+    required_resource_data = ["name", "location", "project_id", "repository"]
+
+    resource_components = {
+        "iam": "getIamPolicy",
+    }
+
+    resource_type = "dataform.googleapis.com/Workspace"
+
+    def _get_request_args(self):
+        return {
+            "name": "projects/{}/locations/{}/repositories/{}/workspaces/{}".format(
+                self._resource_data["project_id"],
+                self._resource_data["location"],
+                self._resource_data["repository"],
+                self._resource_data["name"],
+            ),
+        }
+
+    def _get_iam_request_args(self):
+        return {
+            "resource": "projects/{}/locations/{}/repositories/{}/workspaces/{}".format(
+                self._resource_data["project_id"],
+                self._resource_data["location"],
+                self._resource_data["name"],
                 self._resource_data["name"],
             ),
         }
