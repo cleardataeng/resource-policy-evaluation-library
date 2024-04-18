@@ -117,6 +117,10 @@ class GoogleAPIResource(Resource):
 
     @classmethod
     def subclass_by_type(cls, resource_type):
+        # maps resource_type to the actual resource for cai events and audit log events
+        # cai events use the from_cai_data method to pass in the asset_type, which is used to map to the resource
+        # audit log events use from_resource_data from_resource_data to pass in the resource_type,
+        # which is used to map to the resource
         mapper = {res_cls.resource_type: res_cls for res_cls in cls.__subclasses__()}
 
         try:
