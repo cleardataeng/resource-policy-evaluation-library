@@ -1106,23 +1106,18 @@ class GcpDataformRepository(GoogleAPIResource):
         "uniquifier": "createTime",
     }
 
+    def _get_resource_string(self):
+        return "projects/{}/locations/{}/repositories/{}".format(
+            self._resource_data["project_id"],
+            self._resource_data["location"],
+            self._resource_data["name"],
+        )
+
     def _get_request_args(self):
-        return {
-            "name": "projects/{}/locations/{}/repositories/{}".format(
-                self._resource_data["project_id"],
-                self._resource_data["location"],
-                self._resource_data["name"],
-            ),
-        }
+        return {"name": self._get_resource_string()}
 
     def _get_iam_request_args(self):
-        return {
-            "resource": "projects/{}/locations/{}/repositories/{}".format(
-                self._resource_data["project_id"],
-                self._resource_data["location"],
-                self._resource_data["name"],
-            ),
-        }
+        return {"resource": self._get_resource_string()}
 
 
 class GcpDataformWorkspace(GoogleAPIResource):
@@ -1138,22 +1133,16 @@ class GcpDataformWorkspace(GoogleAPIResource):
 
     resource_type = "dataform.googleapis.com/Workspace"
 
+    def _get_resource_string(self):
+        return "projects/{}/locations/{}/repositories/{}/workspaces/{}".format(
+            self._resource_data["project_id"],
+            self._resource_data["location"],
+            self._resource_data["repository"],
+            self._resource_data["name"],
+        )
+
     def _get_request_args(self):
-        return {
-            "name": "projects/{}/locations/{}/repositories/{}/workspaces/{}".format(
-                self._resource_data["project_id"],
-                self._resource_data["location"],
-                self._resource_data["repository"],
-                self._resource_data["name"],
-            ),
-        }
+        return {"name": self._get_resource_string()}
 
     def _get_iam_request_args(self):
-        return {
-            "resource": "projects/{}/locations/{}/repositories/{}/workspaces/{}".format(
-                self._resource_data["project_id"],
-                self._resource_data["location"],
-                self._resource_data["repository"],
-                self._resource_data["name"],
-            ),
-        }
+        return {"resource": self._get_resource_string()}
