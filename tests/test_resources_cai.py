@@ -261,7 +261,6 @@ def test_gcp_resource_from_cai_data(case):
 
 
 def test_bad_resource_type():
-
     with pytest.raises(ResourceException) as excinfo:
         GoogleAPIResource.from_cai_data(
             "//cloudfakeservice.googleapis.com/widgets/test-resource",

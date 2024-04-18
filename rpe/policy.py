@@ -27,7 +27,6 @@ class _EvaluationTrigger:
 # that has the results of an eval without details about what triggered it
 @dataclass
 class EvaluationResult:
-
     compliant: bool
     remediable: bool
 

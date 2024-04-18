@@ -460,7 +460,7 @@ location_test_cases = [
             "name": test_resource_name,
             "location": "us-central1",
             "project_id": test_project,
-            "repository": "test_repository"
+            "repository": "test_repository",
         },
         cls=GcpDataformWorkspace,
         resource_type="dataform.googleapis.com/Workspace",
@@ -529,7 +529,6 @@ def test_gcp_location(case):
 
 def test_missing_resource_data():
     with pytest.raises(ResourceException) as excinfo:
-
         GcpAppEngineInstance(name=test_resource_name)
 
     assert "Missing data required for resource creation" in str(excinfo.value)

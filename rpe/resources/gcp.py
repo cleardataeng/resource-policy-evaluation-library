@@ -32,7 +32,6 @@ from .base import Resource
 
 
 class GoogleAPIResource(Resource):
-
     # Names of the get method of the root resource
     get_method = "get"
     required_resource_data = ["name"]
@@ -56,7 +55,6 @@ class GoogleAPIResource(Resource):
     inferred_data_map = None
 
     def __init__(self, client_kwargs=None, http=None, **resource_data):
-
         if client_kwargs is None:
             client_kwargs = {}
 
@@ -78,7 +76,6 @@ class GoogleAPIResource(Resource):
     def _validate_resource_data(self):
         """Verify we have all the required data for this resource"""
         if not all(arg in self._resource_data for arg in self.required_resource_data):
-
             raise ResourceException(
                 "Missing data required for resource creation. Expected data: {}; Got: {}".format(
                     ",".join(self.required_resource_data),
@@ -158,7 +155,6 @@ class GoogleAPIResource(Resource):
         return res_cls(client_kwargs=client_kwargs, http=http, **resource_data)
 
     def to_dict(self):
-
         self._refresh_inferred_data()
 
         details = self._resource_data.copy()
@@ -177,7 +173,6 @@ class GoogleAPIResource(Resource):
 
     # Some useful resource data may not be available when instantiated
     def _refresh_inferred_data(self):
-
         if not self.inferred_data_map:
             return
 
@@ -212,7 +207,6 @@ class GoogleAPIResource(Resource):
     # If we inject it into the resource, we can use it in policy evaluation to
     # simplify the structure of our policies
     def gen_full_resource_name(self):
-
         method = getattr(self.service, self.get_method)
         uri = method(**self._get_request_args()).uri
 
@@ -295,7 +289,6 @@ class GoogleAPIResource(Resource):
         return component_metadata
 
     def get(self, refresh=True):
-
         if not refresh and self._resource_metadata:
             return self._resource_metadata
 
@@ -412,7 +405,6 @@ class GoogleAPIResource(Resource):
 
     @client_kwargs.setter
     def client_kwargs(self, client_kwargs):
-
         # Invalidate service/parent because client_kwargs changed
         self._service = None
 
@@ -421,7 +413,6 @@ class GoogleAPIResource(Resource):
     @property
     def service(self):
         if self._service is None:
-
             full_resource_path = "{}.{}".format(self.service_name, self.resource_path)
             self._service = build_subresource(
                 full_resource_path, self.version, **self._client_kwargs, http=self._http
@@ -464,7 +455,6 @@ class GoogleAPIResource(Resource):
 
 
 class GcpAppEngineInstance(GoogleAPIResource):
-
     service_name = "appengine"
     resource_path = "apps.services.versions.instances"
     version = "v1"
@@ -489,7 +479,6 @@ class GcpAppEngineInstance(GoogleAPIResource):
 
 
 class GcpBigqueryDataset(GoogleAPIResource):
-
     service_name = "bigquery"
     resource_path = "datasets"
     version = "v2"
@@ -510,7 +499,6 @@ class GcpBigqueryDataset(GoogleAPIResource):
 
 
 class GcpBigtableInstance(GoogleAPIResource):
-
     service_name = "bigtableadmin"
     resource_path = "projects.instances"
     version = "v2"
@@ -541,7 +529,6 @@ class GcpBigtableInstance(GoogleAPIResource):
 
 
 class GcpCloudFunction(GoogleAPIResource):
-
     service_name = "cloudfunctions"
     resource_path = "projects.locations.functions"
     version = "v1"
@@ -582,7 +569,6 @@ class GcpCloudFunction(GoogleAPIResource):
 
 
 class GcpComputeInstance(GoogleAPIResource):
-
     service_name = "compute"
     resource_path = "instances"
     version = "v1"
@@ -604,7 +590,6 @@ class GcpComputeInstance(GoogleAPIResource):
 
 
 class GcpComputeDisk(GoogleAPIResource):
-
     service_name = "compute"
     resource_path = "disks"
     version = "v1"
@@ -626,7 +611,6 @@ class GcpComputeDisk(GoogleAPIResource):
 
 
 class GcpComputeRegionDisk(GoogleAPIResource):
-
     service_name = "compute"
     resource_path = "regionDisks"
     version = "v1"
@@ -648,7 +632,6 @@ class GcpComputeRegionDisk(GoogleAPIResource):
 
 
 class GcpComputeNetwork(GoogleAPIResource):
-
     service_name = "compute"
     resource_path = "networks"
     version = "v1"
@@ -669,7 +652,6 @@ class GcpComputeNetwork(GoogleAPIResource):
 
 
 class GcpComputeSubnetwork(GoogleAPIResource):
-
     service_name = "compute"
     resource_path = "subnetworks"
     version = "v1"
@@ -691,7 +673,6 @@ class GcpComputeSubnetwork(GoogleAPIResource):
 
 
 class GcpComputeFirewall(GoogleAPIResource):
-
     service_name = "compute"
     resource_path = "firewalls"
     version = "v1"
@@ -773,7 +754,6 @@ class GcpDatafusionInstance(GoogleAPIResource):
 
 
 class GcpGkeCluster(GoogleAPIResource):
-
     service_name = "container"
     resource_path = "projects.locations.clusters"
     version = "v1"
@@ -802,7 +782,6 @@ class GcpGkeCluster(GoogleAPIResource):
 
 
 class GcpGkeClusterNodepool(GoogleAPIResource):
-
     service_name = "container"
     resource_path = "projects.locations.clusters.nodePools"
     version = "v1"
@@ -831,7 +810,6 @@ class GcpGkeClusterNodepool(GoogleAPIResource):
 
 
 class GcpIamServiceAccount(GoogleAPIResource):
-
     service_name = "iam"
     resource_path = "projects.serviceAccounts"
     version = "v1"
@@ -853,7 +831,6 @@ class GcpIamServiceAccount(GoogleAPIResource):
 
 
 class GcpIamServiceAccountKey(GoogleAPIResource):
-
     service_name = "iam"
     resource_path = "projects.serviceAccounts.keys"
     version = "v1"
@@ -877,7 +854,6 @@ class GcpIamServiceAccountKey(GoogleAPIResource):
 
 
 class GcpPubsubSubscription(GoogleAPIResource):
-
     service_name = "pubsub"
     resource_path = "projects.subscriptions"
     version = "v1"
@@ -906,7 +882,6 @@ class GcpPubsubSubscription(GoogleAPIResource):
 
 
 class GcpPubsubTopic(GoogleAPIResource):
-
     service_name = "pubsub"
     resource_path = "projects.topics"
     version = "v1"
@@ -935,7 +910,6 @@ class GcpPubsubTopic(GoogleAPIResource):
 
 
 class GcpStorageBucket(GoogleAPIResource):
-
     service_name = "storage"
     resource_path = "buckets"
     version = "v1"
@@ -960,7 +934,6 @@ class GcpStorageBucket(GoogleAPIResource):
 
 
 class GcpSqlInstance(GoogleAPIResource):
-
     service_name = "sqladmin"
     resource_path = "instances"
     version = "v1beta4"
@@ -980,7 +953,6 @@ class GcpSqlInstance(GoogleAPIResource):
 
 
 class GcpOrganization(GoogleAPIResource):
-
     service_name = "cloudresourcemanager"
     resource_path = "organizations"
     version = "v1"
@@ -999,7 +971,6 @@ class GcpOrganization(GoogleAPIResource):
 
 
 class GcpProject(GoogleAPIResource):
-
     service_name = "cloudresourcemanager"
     resource_path = "projects"
     version = "v1"
@@ -1022,7 +993,6 @@ class GcpProject(GoogleAPIResource):
 
 
 class GcpProjectService(GoogleAPIResource):
-
     service_name = "serviceusage"
     resource_path = "services"
     version = "v1"
@@ -1040,7 +1010,6 @@ class GcpProjectService(GoogleAPIResource):
 
 
 class GcpDataflowJob(GoogleAPIResource):
-
     service_name = "dataflow"
     resource_path = "projects.locations.jobs"
     version = "v1b3"
@@ -1063,7 +1032,6 @@ class GcpDataflowJob(GoogleAPIResource):
 
 
 class GcpRedisInstance(GoogleAPIResource):
-
     service_name = "redis"
     resource_path = "projects.locations.instances"
     version = "v1"
@@ -1091,7 +1059,6 @@ class GcpRedisInstance(GoogleAPIResource):
 
 
 class GcpMemcacheInstance(GoogleAPIResource):
-
     service_name = "memcache"
     resource_path = "projects.locations.instances"
     version = "v1"
@@ -1119,7 +1086,6 @@ class GcpMemcacheInstance(GoogleAPIResource):
 
 
 class GcpDataformRepository(GoogleAPIResource):
-
     service_name = "dataform"
     resource_path = "projects.locations.repositories"
     version = "v1beta1"
@@ -1156,7 +1122,6 @@ class GcpDataformRepository(GoogleAPIResource):
 
 
 class GcpDataformWorkspace(GoogleAPIResource):
-
     service_name = "dataform"
     resource_path = "projects.locations.repositories.workspaces"
     version = "v1beta1"

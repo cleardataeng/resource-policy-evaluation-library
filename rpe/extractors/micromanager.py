@@ -33,7 +33,6 @@ class MicromanagerMetadata(PubsubMessageMetadata, ExtractedMetadata):
 class MicromanagerEvaluationRequest(Extractor):
     @classmethod
     def extract(cls, message):
-
         message_data = json.loads(message.data)
 
         name = message_data.get("name")

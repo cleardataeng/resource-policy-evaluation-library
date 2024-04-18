@@ -17,7 +17,6 @@ from abc import ABC, abstractmethod
 
 
 class Resource(ABC):
-
     # Returns a dictionary representing the resource. Must contain a 'type' key
     # indicating what type of resource it is
     @abstractmethod

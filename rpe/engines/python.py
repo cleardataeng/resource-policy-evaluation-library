@@ -23,11 +23,9 @@ from rpe.policy import Evaluation, EvaluationResult, Policy
 
 
 class PythonPolicyEngine:
-
     counter = 0
 
     def __init__(self, package_path):
-
         self._policies = {}
         self.package_path = package_path
         PythonPolicyEngine.counter += 1
@@ -85,7 +83,6 @@ class PythonPolicyEngine:
 
         for policy_name, policy_cls in matched_policies.items():
             try:
-
                 if hasattr(policy_cls, "evaluate"):
                     eval_result = policy_cls.evaluate(resource)
                     if not isinstance(eval_result, EvaluationResult):
