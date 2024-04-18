@@ -101,7 +101,7 @@ class GoogleAPIResource(Resource):
             "cluster": r"/clusters/([^\/]+)/",
             # ServiceAccounts
             "service_account": r"serviceAccounts/([^\/]+)/",
-            # Dataform
+            # Dataform repository, used to query dataform workspaces
             "repository": r"/repositories/([^\/]+)/",
         }
 
@@ -1149,7 +1149,7 @@ class GcpDataformWorkspace(GoogleAPIResource):
             "resource": "projects/{}/locations/{}/repositories/{}/workspaces/{}".format(
                 self._resource_data["project_id"],
                 self._resource_data["location"],
-                self._resource_data["name"],
+                self._resource_data["repository"],
                 self._resource_data["name"],
             ),
         }
