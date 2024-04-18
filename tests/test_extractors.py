@@ -208,6 +208,24 @@ test_single_asset_log_params = [
         "create",
         "test-instance",
     ),
+    (
+        "dataform-create-repository.json",
+        "dataform.googleapis.com/Repository",
+        "create",
+        "test-repository",
+    ),
+    (
+        "dataform-create-workspace.json",
+        "dataform.googleapis.com/Workspace",
+        "create",
+        "test-workspace",
+    ),
+    (
+        "dataform-update-repository.json",
+        "dataform.googleapis.com/Repository",
+        "update",
+        "test-repository",
+    ),
 ]
 
 test_micromanager_log = [

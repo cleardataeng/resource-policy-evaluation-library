@@ -425,4 +425,22 @@ class GCPAuditLog(Extractor):
             }
             add_resource()
 
+        elif (
+            res_type == "audited_resource"
+            and prop("resource.labels.service") == "dataform.googleapis.com"
+        ):
+            name_bits = prop("protoPayload.resourceName").split("/")
+            resource_data = {
+                "name": name_bits[len(name_bits) - 1],
+                "project_id": name_bits[1],
+                "location": name_bits[3],
+            }
+            if len(name_bits) == 6 and name_bits[4] == "repositories":
+                resource_data["resource_type"] = "dataform.googleapis.com/Repository"
+                add_resource()
+            elif len(name_bits) == 8 and name_bits[6] == "workspaces":
+                resource_data["resource_type"] = "dataform.googleapis.com/Workspace"
+                resource_data["repository"] = name_bits[4]
+                add_resource()
+
         return resources

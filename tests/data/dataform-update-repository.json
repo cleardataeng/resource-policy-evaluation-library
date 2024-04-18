@@ -1,0 +1,57 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "status": {},
+    "authenticationInfo": {
+      "principalEmail": "yash.vaidya@cleardata.com"
+    },
+    "requestMetadata": {
+      "callerIp": "::1",
+      "requestAttributes": {
+        "time": "2024-04-17T19:57:47.218933650Z",
+        "auth": {}
+      },
+      "destinationAttributes": {}
+    },
+    "serviceName": "dataform.googleapis.com",
+    "methodName": "google.cloud.dataform.v1beta1.Dataform.UpdateRepository",
+    "authorizationInfo": [
+      {
+        "resource": "projects/test-project/locations/us-east5/repositories/test-repository",
+        "permission": "dataform.repositories.update",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "dataform.googleapis.com",
+          "name": "projects/test-project/locations/us-east5/repositories/test-repository",
+          "type": "dataform.googleapis.com/Repository"
+        },
+        "permissionType": "ADMIN_WRITE"
+      }
+    ],
+    "resourceName": "projects/test-project/locations/us-east5/repositories/test-repository",
+    "request": {
+      "@type": "type.googleapis.com/google.cloud.dataform.v1beta1.UpdateRepositoryRequest"
+    },
+    "response": {
+      "@type": "type.googleapis.com/google.cloud.dataform.v1beta1.Repository"
+    },
+    "resourceLocation": {
+      "currentLocations": [
+        "us-east5"
+      ]
+    }
+  },
+  "insertId": "1lfo2qse2tixp",
+  "resource": {
+    "type": "audited_resource",
+    "labels": {
+      "service": "dataform.googleapis.com",
+      "project_id": "test-project",
+      "method": "google.cloud.dataform.v1beta1.Dataform.UpdateRepository"
+    }
+  },
+  "timestamp": "2024-04-17T19:57:47.314676541Z",
+  "severity": "NOTICE",
+  "logName": "projects/test-project/logs/cloudaudit.googleapis.com%2Factivity",
+  "receiveTimestamp": "2024-04-17T19:57:48.059129560Z"
+}

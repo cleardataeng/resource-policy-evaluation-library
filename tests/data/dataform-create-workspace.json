@@ -1,0 +1,57 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "status": {},
+    "authenticationInfo": {
+      "principalEmail": "yash.vaidya@cleardata.com"
+    },
+    "requestMetadata": {
+      "callerIp": "::1",
+      "requestAttributes": {
+        "time": "2024-04-16T13:02:05.896006678Z",
+        "auth": {}
+      },
+      "destinationAttributes": {}
+    },
+    "serviceName": "dataform.googleapis.com",
+    "methodName": "google.cloud.dataform.v1beta1.Dataform.CreateWorkspace",
+    "authorizationInfo": [
+      {
+        "resource": "projects/test-project/locations/us-east5/repositories/test-repository/workspaces/test-workspace",
+        "permission": "dataform.workspaces.create",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "dataform.googleapis.com",
+          "name": "projects/test-project/locations/us-east5/repositories/test-repository/workspaces/test-workspace",
+          "type": "dataform.googleapis.com/Workspace"
+        },
+        "permissionType": "ADMIN_WRITE"
+      }
+    ],
+    "resourceName": "projects/test-project/locations/us-east5/repositories/test-repository/workspaces/test-workspace",
+    "request": {
+      "@type": "type.googleapis.com/google.cloud.dataform.v1beta1.CreateWorkspaceRequest"
+    },
+    "response": {
+      "@type": "type.googleapis.com/google.cloud.dataform.v1beta1.Workspace"
+    },
+    "resourceLocation": {
+      "currentLocations": [
+        "us-east5"
+      ]
+    }
+  },
+  "insertId": "1cu2hlce2l3dd",
+  "resource": {
+    "type": "audited_resource",
+    "labels": {
+      "project_id": "test-project",
+      "method": "google.cloud.dataform.v1beta1.Dataform.CreateWorkspace",
+      "service": "dataform.googleapis.com"
+    }
+  },
+  "timestamp": "2024-04-16T13:02:06.781641484Z",
+  "severity": "NOTICE",
+  "logName": "projects/test-project/logs/cloudaudit.googleapis.com%2Factivity",
+  "receiveTimestamp": "2024-04-16T13:02:07.768003559Z"
+}
