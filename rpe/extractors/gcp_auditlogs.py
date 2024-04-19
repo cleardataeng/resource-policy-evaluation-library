@@ -65,7 +65,6 @@ class GCPAuditLog(Extractor):
 
     @classmethod
     def is_audit_log(cls, message_data):
-
         log_type = jmespath.search('protoPayload."@type"', message_data)
         log_name = message_data.get("logName", "")
 
@@ -83,7 +82,6 @@ class GCPAuditLog(Extractor):
 
     @classmethod
     def get_metadata(cls, message_data):
-
         method_name = jmespath.search("protoPayload.methodName", message_data)
         insert_id = message_data.get("insertId")
 
@@ -106,7 +104,6 @@ class GCPAuditLog(Extractor):
 
     @classmethod
     def get_operation_type(cls, method_name):
-
         last = method_name.split(".")[-1].lower()
         # For batch methods, look for the verb after the word 'batch'
         if last.startswith("batch"):
@@ -148,7 +145,6 @@ class GCPAuditLog(Extractor):
 
     @classmethod
     def get_resources(cls, message):
-
         resources = []
 
         res_type = jmespath.search("resource.type", message)
@@ -170,7 +166,6 @@ class GCPAuditLog(Extractor):
         if res_type == "cloudsql_database" and method_name.startswith(
             "cloudsql.instances"
         ):
-
             resource_data = {
                 "resource_type": "sqladmin.googleapis.com/Instance",
                 # CloudSQL logs are inconsistent. See https://issuetracker.google.com/issues/137629452
@@ -233,7 +228,6 @@ class GCPAuditLog(Extractor):
             or "DisableService" in method_name
             or "ctivateService" in method_name
         ):
-
             resource_data = {
                 "resource_type": "serviceusage.googleapis.com/Service",
                 "project_id": prop("resource.labels.project_id"),
@@ -298,7 +292,6 @@ class GCPAuditLog(Extractor):
             add_resource()
 
         elif res_type == "gce_instance":
-
             instance_name = prop("protoPayload.resourceName").split("/")[-1]
 
             resource_data = {
@@ -321,7 +314,6 @@ class GCPAuditLog(Extractor):
             disks = prop("protoPayload.request.disks") or []
 
             for disk in disks:
-
                 # The name of the disk is complicated. If the diskName is set in initParams use that
                 # If not AND its the boot disk, use the instance name
                 # Otherwise use the device name
@@ -432,5 +424,23 @@ class GCPAuditLog(Extractor):
                 "resource_type": "datafusion.googleapis.com/Instance",
             }
             add_resource()
+
+        elif (
+            res_type == "audited_resource"
+            and prop("resource.labels.service") == "dataform.googleapis.com"
+        ):
+            name_bits = prop("protoPayload.resourceName").split("/")
+            resource_data = {
+                "name": name_bits[len(name_bits) - 1],
+                "project_id": name_bits[1],
+                "location": name_bits[3],
+            }
+            if len(name_bits) == 6 and name_bits[4] == "repositories":
+                resource_data["resource_type"] = "dataform.googleapis.com/Repository"
+                add_resource()
+            elif len(name_bits) == 8 and name_bits[6] == "workspaces":
+                resource_data["resource_type"] = "dataform.googleapis.com/Workspace"
+                resource_data["repository"] = name_bits[4]
+                add_resource()
 
         return resources

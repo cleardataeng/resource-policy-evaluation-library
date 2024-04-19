@@ -32,6 +32,8 @@ from rpe.resources.gcp import (
     GcpDataflowJob,
     GcpDatafusionInstance,
     GcpDataprocCluster,
+    GcpDataformRepository,
+    GcpDataformWorkspace,
     GcpGkeCluster,
     GcpGkeClusterNodepool,
     GcpIamServiceAccount,
@@ -228,6 +230,20 @@ test_cases = [
         },
         resource_cls=GcpMemcacheInstance,
     ),
+    CaiTestCase(
+        data={
+            "name": "//dataform.googleapis.com/projects/test-project/locations/us-central1/repositories/test-resource",
+            "asset_type": "dataform.googleapis.com/Repository",
+        },
+        resource_cls=GcpDataformRepository,
+    ),
+    CaiTestCase(
+        data={
+            "name": "//dataform.googleapis.com/projects/test-project/locations/us-central1/repositories/test-repository/workspaces/test-resource",
+            "asset_type": "dataform.googleapis.com/Workspace",
+        },
+        resource_cls=GcpDataformWorkspace,
+    ),
 ]
 
 
@@ -245,7 +261,6 @@ def test_gcp_resource_from_cai_data(case):
 
 
 def test_bad_resource_type():
-
     with pytest.raises(ResourceException) as excinfo:
         GoogleAPIResource.from_cai_data(
             "//cloudfakeservice.googleapis.com/widgets/test-resource",
