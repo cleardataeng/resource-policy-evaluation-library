@@ -329,7 +329,7 @@ class GoogleAPIResource(Resource):
         # Check for an update spec version, default to version 1
         remediation_spec = remediation.get("_remediation_spec", "")
 
-        if remediation_spec in ["v2beta1", "v2"]:
+        if remediation_spec in ["v2beta1", "v2", "v1beta1"]:
             required_keys = ["method", "params"]
 
             for step in remediation.get("steps", []):
