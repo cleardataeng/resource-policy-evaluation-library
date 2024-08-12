@@ -51,13 +51,19 @@ class OpenPolicyAgent(Engine):
 
     # Perform an evaluation on a given resource
     def evaluate(self, resource):
-        input = {
-            "input": resource.get(),
-        }
+        try:
+            _input = {
+                "input": resource.get(),
+            }
+            evals = self._opa_request("rpe/evaluate_v2", method="POST", data=_input)
+            return [Evaluation(engine=self, resource=resource, **ev) for ev in evals]
+        except Exception as e:
+            print(
+                f"Exception during OPA eval. Resource Name: {resource.name}, Project: {resource.project_id}, "
+                f"location: {resource.location}. Exception Message: {str(e)}"
+            )
 
-        evals = self._opa_request("rpe/evaluate_v2", method="POST", data=input)
-
-        return [Evaluation(engine=self, resource=resource, **ev) for ev in evals]
+        return []
 
     def policies(self):
         """
