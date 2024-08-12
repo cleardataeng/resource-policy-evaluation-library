@@ -58,8 +58,10 @@ class OpenPolicyAgent(Engine):
             evals = self._opa_request("rpe/evaluate_v2", method="POST", data=_input)
             return [Evaluation(engine=self, resource=resource, **ev) for ev in evals]
         except Exception as e:
-            print(f"Exception during OPA eval. Resource Name: {resource.name}, Project: {resource.project_id}, "
-                  f"location: {resource.location}. Exception Message: {str(e)}")
+            print(
+                f"Exception during OPA eval. Resource Name: {resource.name}, Project: {resource.project_id}, "
+                f"location: {resource.location}. Exception Message: {str(e)}"
+            )
 
         return []
 
