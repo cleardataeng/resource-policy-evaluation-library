@@ -84,10 +84,14 @@ class PythonPolicyEngine:
         for policy_name, policy_cls in matched_policies.items():
             try:
                 if hasattr(policy_cls, "should_evaluate_policy"):
-                    should_evaluate_policy_res = policy_cls.should_evaluate_policy(resource)
+                    should_evaluate_policy_res = policy_cls.should_evaluate_policy(
+                        resource
+                    )
                     if not should_evaluate_policy_res:
-                        print(f"Policy: {policy_name}, will not be evaluated for resource {resource} "
-                              f"as should_evaluate_policy returned {should_evaluate_policy_res}")
+                        print(
+                            f"Policy: {policy_name}, will not be evaluated for resource {resource} "
+                            f"as should_evaluate_policy returned {should_evaluate_policy_res}"
+                        )
                         continue
 
                 if hasattr(policy_cls, "evaluate"):
