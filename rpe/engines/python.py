@@ -16,6 +16,7 @@
 import importlib.util
 import inspect
 import sys
+import traceback
 
 from dataclasses import asdict
 
@@ -114,8 +115,9 @@ class PythonPolicyEngine:
 
             # These are user-provided modules, we need to catch any exception
             except Exception as e:
-                print(f"Evaluation exception. Policy: {policy_name}, Message: {str(e)}")
-
+                print("Evaluation exception. Policy: {0}, Message: {1}, Exception Stacktrace: {2}".format(
+                    policy_name,  repr(e), traceback.format_exc()
+                ))
         return evals
 
     def _legacy_eval(self, resource, policy_name, policy_cls):
