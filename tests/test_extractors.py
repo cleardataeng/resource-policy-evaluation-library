@@ -226,6 +226,18 @@ test_single_asset_log_params = [
         "update",
         "test-repository",
     ),
+    (
+        "notebook_instance_create_01.json",
+        "notebooks.googleapis.com/Instance",
+        "create",
+        "test-create-event",
+    ),
+    (
+        "notebook_instance_update_01.json",
+        "notebooks.googleapis.com/Instance",
+        "update",
+        "test-notebook",
+    ),
 ]
 
 test_micromanager_log = [
