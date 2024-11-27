@@ -3,8 +3,8 @@
     "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
     "status": {},
     "authenticationInfo": {
-      "principalEmail": "neeraj.tickoo@cleardata.com",
-      "principalSubject": "user:neeraj.tickoo@cleardata.com"
+      "principalEmail": "test@test-domain.com",
+      "principalSubject": "user:test@test-domain.com"
     },
     "requestMetadata": {
       "callerIp": "70.113.39.123",
@@ -19,20 +19,20 @@
     "methodName": "google.cloud.notebooks.v2.NotebookService.CreateInstance",
     "authorizationInfo": [
       {
-        "resource": "projects/cd-onboarding-graph-test-4/locations/us-central1-a/instances/test-create-event",
+        "resource": "projects/test-vertex-ai-project/locations/us-central1-a/instances/test-create-event",
         "permission": "notebooks.instances.create",
         "granted": true,
         "resourceAttributes": {
           "service": "notebooks.googleapis.com",
-          "name": "projects/cd-onboarding-graph-test-4/locations/us-central1-a/instances/test-create-event"
+          "name": "projects/test-vertex-ai-project/locations/us-central1-a/instances/test-create-event"
         },
         "permissionType": "ADMIN_WRITE"
       }
     ],
-    "resourceName": "projects/cd-onboarding-graph-test-4/locations/us-central1-a/instances/test-create-event",
+    "resourceName": "projects/test-vertex-ai-project/locations/us-central1-a/instances/test-create-event",
     "request": {
       "instance": {},
-      "parent": "projects/cd-onboarding-graph-test-4/locations/us-central1-a",
+      "parent": "projects/test-vertex-ai-project/locations/us-central1-a",
       "@type": "type.googleapis.com/google.cloud.notebooks.v2.CreateInstanceRequest",
       "instance_id": "test-create-event"
     },
@@ -50,15 +50,15 @@
     "type": "audited_resource",
     "labels": {
       "method": "google.cloud.notebooks.v2.NotebookService.CreateInstance",
-      "project_id": "cd-onboarding-graph-test-4",
+      "project_id": "test-vertex-ai-project",
       "service": "notebooks.googleapis.com"
     }
   },
   "timestamp": "2024-11-22T19:39:11.999291772Z",
   "severity": "NOTICE",
-  "logName": "projects/cd-onboarding-graph-test-4/logs/cloudaudit.googleapis.com%2Factivity",
+  "logName": "projects/test-vertex-ai-project/logs/cloudaudit.googleapis.com%2Factivity",
   "operation": {
-    "id": "projects/cd-onboarding-graph-test-4/locations/us-central1-a/operations/operation-1732304350517-6278589749919-3cddbad0-d4e5f89e",
+    "id": "projects/test-vertex-ai-project/locations/us-central1-a/operations/operation-1732304350517-6278589749919-3cddbad0-d4e5f89e",
     "producer": "notebooks.googleapis.com",
     "first": true
   },

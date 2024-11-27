@@ -6,8 +6,8 @@
       "message": "instance in state \"ACTIVE\" must be stopped before updating one of the following: [accelerator_configs machine_type shielded_instance_config reservation_affinity], failed precondition"
     },
     "authenticationInfo": {
-      "principalEmail": "neeraj.tickoo@cleardata.com",
-      "principalSubject": "user:neeraj.tickoo@cleardata.com"
+      "principalEmail": "test-user@test-domain.com",
+      "principalSubject": "user:test-user@test-domain.com"
     },
     "requestMetadata": {
       "callerIp": "70.113.39.123",
@@ -22,17 +22,17 @@
     "methodName": "google.cloud.notebooks.v2.NotebookService.UpdateInstance",
     "authorizationInfo": [
       {
-        "resource": "projects/cd-onboarding-graph-test-4/locations/us-central1-a/instances/test-notebook",
+        "resource": "projects/test-gcp-vertex-ai-project/locations/us-central1-a/instances/test-notebook",
         "permission": "notebooks.instances.update",
         "granted": true,
         "resourceAttributes": {
           "service": "notebooks.googleapis.com",
-          "name": "projects/cd-onboarding-graph-test-4/locations/us-central1-a/instances/test-notebook"
+          "name": "projects/test-gcp-vertex-ai-project/locations/us-central1-a/instances/test-notebook"
         },
         "permissionType": "ADMIN_WRITE"
       }
     ],
-    "resourceName": "projects/cd-onboarding-graph-test-4/locations/us-central1-a/instances/test-notebook",
+    "resourceName": "projects/test-gcp-vertex-ai-project/locations/us-central1-a/instances/test-notebook",
     "request": {
       "@type": "type.googleapis.com/google.cloud.notebooks.v2.UpdateInstanceRequest",
       "instance": {}
@@ -51,12 +51,12 @@
     "type": "audited_resource",
     "labels": {
       "service": "notebooks.googleapis.com",
-      "project_id": "cd-onboarding-graph-test-4",
+      "project_id": "test-gcp-vertex-ai-project",
       "method": "google.cloud.notebooks.v2.NotebookService.UpdateInstance"
     }
   },
   "timestamp": "2024-11-22T21:34:16.891531432Z",
   "severity": "ERROR",
-  "logName": "projects/cd-onboarding-graph-test-4/logs/cloudaudit.googleapis.com%2Factivity",
+  "logName": "projects/test-gcp-vertex-ai-project/logs/cloudaudit.googleapis.com%2Factivity",
   "receiveTimestamp": "2024-11-22T21:34:17.868613326Z"
 }

@@ -444,13 +444,16 @@ class GCPAuditLog(Extractor):
                 add_resource()
 
         # Vertex AI Notebook
-        elif res_type == "audited_resource" and prop('resource.labels.service') == 'notebooks.googleapis.com':
-            name_bits = prop('protoPayload.resourceName').split('/')
+        elif (
+            res_type == "audited_resource"
+            and prop("resource.labels.service") == "notebooks.googleapis.com"
+        ):
+            name_bits = prop("protoPayload.resourceName").split("/")
             resource_data = {
-                'name': name_bits[5],
-                'project_id': name_bits[1],
-                'location': name_bits[3],
-                'resource_type': 'notebooks.googleapis.com/Instance',
+                "name": name_bits[5],
+                "project_id": name_bits[1],
+                "location": name_bits[3],
+                "resource_type": "notebooks.googleapis.com/Instance",
             }
             add_resource()
 

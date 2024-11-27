@@ -1152,6 +1152,7 @@ class GcpNotebookInstance(GoogleAPIResource):
     """
     Vertex AI Workbench Instance.
     """
+
     service_name = "notebooks"
     resource_path = "projects.locations.instances"
     version = "v2"
