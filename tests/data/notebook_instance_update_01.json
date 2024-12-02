@@ -1,0 +1,62 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "status": {
+      "code": 9,
+      "message": "instance in state \"ACTIVE\" must be stopped before updating one of the following: [accelerator_configs machine_type shielded_instance_config reservation_affinity], failed precondition"
+    },
+    "authenticationInfo": {
+      "principalEmail": "test-user@test-domain.com",
+      "principalSubject": "user:test-user@test-domain.com"
+    },
+    "requestMetadata": {
+      "callerIp": "70.113.39.123",
+      "callerSuppliedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36,gzip(gfe),gzip(gfe)",
+      "requestAttributes": {
+        "time": "2024-11-22T21:34:16.882098660Z",
+        "auth": {}
+      },
+      "destinationAttributes": {}
+    },
+    "serviceName": "notebooks.googleapis.com",
+    "methodName": "google.cloud.notebooks.v2.NotebookService.UpdateInstance",
+    "authorizationInfo": [
+      {
+        "resource": "projects/test-gcp-vertex-ai-project/locations/us-central1-a/instances/test-notebook",
+        "permission": "notebooks.instances.update",
+        "granted": true,
+        "resourceAttributes": {
+          "service": "notebooks.googleapis.com",
+          "name": "projects/test-gcp-vertex-ai-project/locations/us-central1-a/instances/test-notebook"
+        },
+        "permissionType": "ADMIN_WRITE"
+      }
+    ],
+    "resourceName": "projects/test-gcp-vertex-ai-project/locations/us-central1-a/instances/test-notebook",
+    "request": {
+      "@type": "type.googleapis.com/google.cloud.notebooks.v2.UpdateInstanceRequest",
+      "instance": {}
+    },
+    "response": {
+      "@type": "type.googleapis.com/google.longrunning.Operation"
+    },
+    "resourceLocation": {
+      "currentLocations": [
+        "us-central1-a"
+      ]
+    }
+  },
+  "insertId": "dlmvxeceen",
+  "resource": {
+    "type": "audited_resource",
+    "labels": {
+      "service": "notebooks.googleapis.com",
+      "project_id": "test-gcp-vertex-ai-project",
+      "method": "google.cloud.notebooks.v2.NotebookService.UpdateInstance"
+    }
+  },
+  "timestamp": "2024-11-22T21:34:16.891531432Z",
+  "severity": "ERROR",
+  "logName": "projects/test-gcp-vertex-ai-project/logs/cloudaudit.googleapis.com%2Factivity",
+  "receiveTimestamp": "2024-11-22T21:34:17.868613326Z"
+}

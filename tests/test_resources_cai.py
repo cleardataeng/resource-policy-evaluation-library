@@ -39,6 +39,7 @@ from rpe.resources.gcp import (
     GcpIamServiceAccount,
     GcpIamServiceAccountKey,
     GcpMemcacheInstance,
+    GcpNotebookInstance,
     GcpOrganization,
     GcpProject,
     GcpProjectService,
@@ -243,6 +244,13 @@ test_cases = [
             "asset_type": "dataform.googleapis.com/Workspace",
         },
         resource_cls=GcpDataformWorkspace,
+    ),
+    CaiTestCase(
+        data={
+            "name": "//notebooks.googleapis.com/projects/test-001/locations/us-central1-a/instances/test-instance-01",
+            "asset_type": "notebooks.googleapis.com/Instance",
+        },
+        resource_cls=GcpNotebookInstance,
     ),
 ]
 

@@ -1146,3 +1146,30 @@ class GcpDataformWorkspace(GoogleAPIResource):
 
     def _get_iam_request_args(self):
         return {"resource": self._get_resource_string()}
+
+
+class GcpNotebookInstance(GoogleAPIResource):
+    """
+    Vertex AI Workbench Instance.
+    """
+
+    service_name = "notebooks"
+    resource_path = "projects.locations.instances"
+    version = "v2"
+
+    required_resource_data = ["name", "location", "project_id"]
+
+    resource_type = "notebooks.googleapis.com/Instance"
+
+    inferred_data_map = {
+        "uniquifier": "id",
+    }
+
+    def _get_request_args(self):
+        return {
+            "name": "projects/{}/locations/{}/instances/{}".format(
+                self._resource_data["project_id"],
+                self._resource_data["location"],
+                self._resource_data["name"],
+            ),
+        }
