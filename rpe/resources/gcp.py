@@ -1165,7 +1165,7 @@ class GcpNotebookInstance(GoogleAPIResource):
         "STOPPED",
         "DELETED",
         "SUSPENDING",
-        "SUSPENDED"
+        "SUSPENDED",
     ]
 
     required_resource_data = ["name", "location", "project_id"]
