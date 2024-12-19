@@ -1157,6 +1157,17 @@ class GcpNotebookInstance(GoogleAPIResource):
     resource_path = "projects.locations.instances"
     version = "v2"
 
+    readiness_key = "state"
+    readiness_value = "ACTIVE"
+    readiness_terminal_values = [
+        "STATE_UNSPECIFIED",
+        "STOPPING",
+        "STOPPED",
+        "DELETED",
+        "SUSPENDING",
+        "SUSPENDED",
+    ]
+
     required_resource_data = ["name", "location", "project_id"]
 
     resource_type = "notebooks.googleapis.com/Instance"
