@@ -103,6 +103,8 @@ class GoogleAPIResource(Resource):
             "service_account": r"serviceAccounts/([^\/]+)/",
             # Dataform repository, used to query dataform workspaces
             "repository": r"/repositories/([^\/]+)/",
+            # CryptoKey
+            "key_ring": r"/keyRings/([^\/]+)/",
         }
 
         resource_data = {}
@@ -1110,6 +1112,38 @@ class GcpDataformRepository(GoogleAPIResource):
         return "projects/{}/locations/{}/repositories/{}".format(
             self._resource_data["project_id"],
             self._resource_data["location"],
+            self._resource_data["name"],
+        )
+
+    def _get_request_args(self):
+        return {"name": self._get_resource_string()}
+
+    def _get_iam_request_args(self):
+        return {"resource": self._get_resource_string()}
+
+
+class GcpCryptoKey(GoogleAPIResource):
+    service_name = "cloudkms"
+    resource_path = "projects.locations.keyRings.cryptoKeys"
+    version = "v1"
+
+    required_resource_data = ["name", "location", "project_id", "key_ring"]
+
+    resource_components = {
+        "iam": "getIamPolicy",
+    }
+
+    resource_type = "cloudkms.googleapis.com/CryptoKey"
+
+    inferred_data_map = {
+        "uniquifier": "createTime",
+    }
+
+    def _get_resource_string(self):
+        return "projects/{}/locations/{}/keyRings/{}/cryptoKeys/{}".format(
+            self._resource_data["project_id"],
+            self._resource_data["location"],
+            self._resource_data["key_ring"],
             self._resource_data["name"],
         )
 

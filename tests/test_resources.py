@@ -46,6 +46,7 @@ from rpe.resources.gcp import (
     GcpSqlInstance,
     GcpStorageBucket,
     GoogleAPIResource,
+    GcpCryptoKey,
 )
 
 test_project = "my_project"
@@ -400,6 +401,24 @@ test_cases = [
             ]
         ),
         uniquifier="memcache_createTime",
+    ),
+    ResourceTestCase(
+        resource_data={
+            "name": test_resource_name,
+            "location": "us-central1",
+            "project_id": test_project,
+            "key_ring": "test_key_ring",
+        },
+        cls=GcpCryptoKey,
+        resource_type="cloudkms.googleapis.com/CryptoKey",
+        name="//cloudkms.googleapis.com/projects/my_project/locations/us-central1/keyRings/test_key_ring/cryptoKeys/my_resource",
+        http=HttpMockSequence(
+            [
+                ({"status": 200}, '{"name":"name", "createTime":"cryptoKey_createTime"}'),
+                ({"status": 200}, "{}"),
+            ]
+        ),
+        uniquifier="cryptoKey_createTime",
     ),
 ]
 
