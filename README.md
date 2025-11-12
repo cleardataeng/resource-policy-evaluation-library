@@ -1,5 +1,16 @@
 # resource-policy-evaluation-library
 
+> **⚠️ DEPRECATED - This repository is no longer maintained**
+> 
+> This project is no longer actively maintained or updated. The code is provided as-is for reference purposes only.
+> 
+> - No further updates or bug fixes will be provided
+> - Issues and pull requests will not be reviewed
+> - Security vulnerabilities will not be patched
+> 
+> If you're using this project, please consider migrating to alternative solutions or forking this repository for your own maintenance.
+
+
 rpe-lib is made up of `Policy Engines (rpe.engines.Engine)`, `Resources (rpe.resources.Resource)`, and `Extractors (rpe.resources.Extractor)`.
 
 `Resources` produce details about the current state of a given type of resource. A resource can be just about anything, but the initial goal of the project was to support Google Cloud Platform (GCP) resources. The implemention is intentionally generic to allow support for other resource types
